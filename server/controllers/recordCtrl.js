@@ -265,31 +265,6 @@ exports.getSamplePreparaion = function(req,res){
     return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
   })
 }
- // used to save corresponding case image defined during sample preparation
- exports.saveSampleCollection = function(req,res){
-   try {
-     // validation goes here
-     if(!req.body.record || !req.body.samplePreparation){
-       return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
-     }
-
-     new models.sampleCollectionModel(req.body).save()
-     .then(function(data) {
-        return response.sendResponse(res, 200,"success",constants.messages.success.saveData);
-     })
-     .catch(function(err) {
-       console.log("updateRecord ", err);
-       logger.error("updateRecord ", err);
-       return response.sendResponse(res, 500,"error",constants.messages.error.saveData);
-     })
-
-   } catch (err) {
-     console.log("updateRecord ", err);
-     logger.error("updateRecord ", err);
-     return response.sendResponse(res,500,"error",constants.messages.error.saveData,err);
-   }
- }
-
 exports.checkSupplierLot = function(req,res){
   // validation for :recordId: and :supplierLot
   var query = {
@@ -336,5 +311,107 @@ exports.checkSupplierLot = function(req,res){
  /**
   * **************************************************************
   ******************  Sample preparation Ends ******************
+  * **************************************************************
+  */
+
+
+
+
+
+
+ /**
+  * **************************************************************
+  ******************  Sample colection  starts ******************
+  * **************************************************************
+  */
+
+
+  // used to save corresponding case image defined during sample preparation
+  exports.saveSampleCollection = function(req,res){
+    try {
+      // validation goes here
+      if(!req.body.record || !req.body.samplePreparation){
+        return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
+      }
+
+      new models.sampleCollectionModel(req.body).save()
+      .then(function(data) {
+         return response.sendResponse(res, 200,"success",constants.messages.success.saveData);
+      })
+      .catch(function(err) {
+        console.log("updateRecord ", err);
+        logger.error("updateRecord ", err);
+        return response.sendResponse(res, 500,"error",constants.messages.error.saveData);
+      })
+
+    } catch (err) {
+      console.log("updateRecord ", err);
+      logger.error("updateRecord ", err);
+      return response.sendResponse(res,500,"error",constants.messages.error.saveData,err);
+    }
+  }
+  exports.uploadSampleCollection = function(req,res){
+    try {
+      // validation goes here
+      if(!req.body._id){ //
+        return response.sendResponse(res, 401,"error",constants.messages.error.sampleCollectionIdRequired);
+      }
+      models.sampleCollectionModel.findById(req.body._id).exec()
+      .then(function(sampleCollection) {
+        if(!sampleCollection) {
+          return response.sendResponse(res, 402,"error",constants.messages.error.dataNotFound);
+        }
+        // updating samples image path by looping in file from req and samples array mathcing lot
+        for(var i in req.files) {
+          for(var j in sampleCollection.samples){
+            if(sampleCollection.samples[j].supplierLot && sampleCollection.samples[j].supplierLot.toLowerCase() == req.files[i].fieldname.split("_")[0].toLowerCase()){
+              sampleCollection.samples[j].caseImg = req.files[i].path;
+            }
+          }
+        }
+        sampleCollection.save(function(err,data) {
+          if(err){
+            return response.sendResponse(res, 500,"error","error in upload image data",err);
+          }
+          else{
+            return response.sendResponse(res, 200,"success",constants.messages.success.saveData,sampleCollection._id);
+          }
+        });
+        //return response.sendResponse(res, 200,"success",constants.messages.success.saveData,sampleCollection._id);
+      })
+      .catch(function(err) {
+        return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
+      })
+      // new models.sampleCollectionModel(req.body).save()
+      // .then(function(data) {
+      //    return response.sendResponse(res, 200,"success",constants.messages.success.saveData);
+      // })
+      // .catch(function(err) {
+      //   console.log("updateRecord ", err);
+      //   logger.error("updateRecord ", err);
+      //   return response.sendResponse(res, 500,"error",constants.messages.error.saveData);
+      // })
+
+    } catch (err) {
+      console.log("updateRecord ", err);
+      logger.error("updateRecord ", err);
+      return response.sendResponse(res,500,"error",constants.messages.error.saveData,err);
+    }
+  }
+  exports.getSampleCollection = function(req,res){
+    if(!req.params.record){
+      return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
+    }
+    models.sampleCollectionModel.find({record:req.params.record}).exec()
+    .then(function(data) {
+      return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
+    })
+    .catch(function(err) {
+      return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
+    })
+  }
+ /**
+  * **************************************************************
+  ******************  Sample colection  starts ******************
   * **************************************************************
   */

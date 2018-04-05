@@ -19,9 +19,14 @@ var storage = multer.diskStorage({
     }
   },
   filename: function (req, file, cb) {
-    console.log("req  ",req);
+    // console.log("req  ",req);
     console.log("req  body ",req.body);
-    cb(null, (req.query.po || new Date() )+"_"+file.originalname);
+    if(req.path.indexOf("sampleCollection") != -1){
+      cb(null,file.originalname); // for sample collection keep the original name
+    }
+    else{
+      cb(null, (req.query.po || new Date() )+"_"+file.originalname);
+    }
   }
 });
 var upload = multer({ storage: storage });
@@ -63,6 +68,12 @@ router.get('/samplePreparation/checkSupplierLot/:supplier/:lotNo/:rmGroupName', 
 });
 router.post('/sampleCollection', function(req, res, next) {
   controllers.recordCtrl.saveSampleCollection(req, res);
+});
+router.post('/sampleCollection/upload',upload.any(), function(req, res, next) {
+  controllers.recordCtrl.uploadSampleCollection(req, res);
+});
+router.get('/sampleCollection/:record',function(req, res, next) {
+  controllers.recordCtrl.getSampleCollection(req, res);
 });
 
 

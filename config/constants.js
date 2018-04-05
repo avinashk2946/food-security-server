@@ -12,7 +12,7 @@ var constants = {
       "getData"  : "Error in get data",
       "updateData"  : "Error in update data",
       "deleteData"  : "Error in delete data",
-
+      "dataNotFound" : "Data not found",
       //Role
       "roleExist" : "Role Already Exists !",
       "saveRole" : "Error in saving Role",
@@ -51,6 +51,7 @@ var constants = {
       "saveRecord" : "Error in saving record",
       "recordIdRequired" : "Record Id Required",
       "record_Supp_idRequired" : "Record or supplier Id required",
+      "sampleCollectionIdRequired" : "Sample Collection Id required",
 
       },
     success:{

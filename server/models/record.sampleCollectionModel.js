@@ -9,12 +9,13 @@ var sampleCollectionSchema = new mongoose.Schema({
       {
         index               :{type:Number,required:true}, // to identify sequence of records
         supplierLot         :{type:String,required:true},
-        caseImg              :{type:String},
+        caseImg              :{type:String,default:""},
         qualityAnalysis      : {type:Boolean,default:false},
-        microTest      : {type:Boolean,default:false},
-        virusTest      : {type:Boolean,default:false},
+        // microTest      : {type:Boolean,default:false},
+        // virusTest      : {type:Boolean,default:false},
+        // indicatorTest      : {type:Boolean,default:false},
+        testGrp           : {type:Boolean,default:false},
         pesticideTest      : {type:Boolean,default:false},
-        indicatorTest      : {type:Boolean,default:false},
         comment          :{type:String},
       }
     ],

@@ -1138,7 +1138,7 @@
 			"response": []
 		},
 		{
-			"name": "SaveSampleCollection-POST",
+			"name": "SaveSampleCollection-upload-POST",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -1151,39 +1151,30 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "record",
-							"value": "5ab605b3b9b7c929f8086c6f",
+							"key": "_id",
+							"value": "5ac580bed054e81ffc805412",
 							"description": "",
 							"type": "text"
 						},
 						{
-							"key": "supplierLot1",
-							"value": "testLot3",
-							"description": "",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "testLot3Img",
+							"key": "test1_1",
 							"description": "",
 							"type": "file"
 						},
 						{
-							"key": "supplierLot2",
-							"value": "testLot2",
+							"key": "test2_2",
 							"description": "",
-							"type": "text",
-							"disabled": true
+							"type": "file"
 						},
 						{
-							"key": "testLot2Img",
+							"key": "test3_3",
 							"description": "",
 							"type": "file"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:3000/record/sampleCollection",
+					"raw": "http://localhost:3000/record/sampleCollection/upload",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1191,7 +1182,8 @@
 					"port": "3000",
 					"path": [
 						"record",
-						"sampleCollection"
+						"sampleCollection",
+						"upload"
 					]
 				}
 			},
@@ -1278,7 +1270,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"record\"              : \"5ab0de04e6cb702228b23cb8\",\n    \"samplePreparation\"   : \"5abc074f41f7d01bb4ad5f54\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test\",\n        \n        \"qualityAnalysis\"      : false,\n        \"microTest\"      : false,\n        \"virusTest\"      : false,\n        \"pesticideTest\"      : false,\n        \"indicatorTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n    ]\n}"
+					"raw": "{\n\t\"record\"              : \"5ab0de04e6cb702228b23cb8\",\n    \"samplePreparation\"   : \"5abc074f41f7d01bb4ad5f54\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"test2\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/record/sampleCollection",
@@ -1292,6 +1284,29 @@
 						"sampleCollection"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSampleCollection-GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/record/sampleCollection/5ab0de04e6cb702228b23cb8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"record",
+						"sampleCollection",
+						"5ab0de04e6cb702228b23cb8"
+					]
+				},
+				"description": "format - "
 			},
 			"response": []
 		}
