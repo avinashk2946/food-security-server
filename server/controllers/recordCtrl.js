@@ -364,7 +364,10 @@ exports.checkSupplierLot = function(req,res){
         // updating samples image path by looping in file from req and samples array mathcing lot
         for(var i in req.files) {
           for(var j in sampleCollection.samples){
-            if(sampleCollection.samples[j].supplierLot && sampleCollection.samples[j].supplierLot.toLowerCase() == req.files[i].fieldname.split("_")[0].toLowerCase()){
+            if(sampleCollection.samples[j].supplierLot
+              && sampleCollection.samples[j].supplierLot.toLowerCase() == req.files[i].fieldname.split("_")[0].toLowerCase()
+              && sampleCollection.samples[j].index == req.files[i].fieldname.split("_")[1]
+            ){
               sampleCollection.samples[j].caseImg = req.files[i].path;
             }
           }

@@ -4,12 +4,22 @@ var router = express.Router();
 var controllers = require("./../controllers/index");
 var passport = require("passport");
 var config = require("config");
-
+var fs = require('fs');
 // multer configuration starts
 var multer = require('multer');
 var storage = multer.diskStorage({
   // destination
   destination: function (req, file, cb) {
+
+    // creating dynamic folder
+    if (!fs.existsSync(config.get(config.get("env")+".uploadPath") ) ) { // upload folder
+        fs.mkdirSync(config.get(config.get("env")+".uploadPath"));
+    }
+    // sample collection folder
+    if (!fs.existsSync(config.get(config.get("env")+".uploadPath")+"/sampleCollection" ) ) { // upload folder
+        fs.mkdirSync(config.get(config.get("env")+".uploadPath")+"/sampleCollection" );
+    }
+    // upload starts here
     if(req.path.indexOf("sampleCollection") != -1){
       cb(null, config.get(config.get("env")+".uploadPath")+"/sampleCollection" )
     }
