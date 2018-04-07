@@ -86,10 +86,8 @@ router.get('/sampleCollection/:record',function(req, res, next) {
   controllers.recordCtrl.getSampleCollection(req, res);
 });
 
-
-
-//router.delete('/:id', function(req, res, next) {
-  //controllers.configCtrl.deleteConfig(req, res);
-//});
+router.delete('/:id', function(req, res, next) {
+  controllers.recordCtrl.deleteRecord(req, res);
+});
 
 module.exports = router;
