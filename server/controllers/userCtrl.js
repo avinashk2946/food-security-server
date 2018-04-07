@@ -451,7 +451,7 @@ exports.resetPassword = function(req, res) {
         username : req.body.username
       },
       updateData = {
-        passowrd : req.body.password
+        password : req.body.password
       },
       option = {
         new:true,
@@ -462,7 +462,8 @@ exports.resetPassword = function(req, res) {
         if(err) {
           return response.sendResponse(res, 500, "error", constants.messages.error.saveData, error);
         }
-        if(!user) {
+        console.log(user);
+        if(!user.nModified) {
           // no user found
           logger.error("no user found");
           return response.sendResponse(res, 402, "error",constants.messages.error.dataNotFound);

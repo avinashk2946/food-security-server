@@ -1152,7 +1152,7 @@
 					"formdata": [
 						{
 							"key": "_id",
-							"value": "5ac580bed054e81ffc805412",
+							"value": "5ac69ffd1deb6b0d8030489e",
 							"description": "",
 							"type": "text"
 						},
@@ -1162,14 +1162,26 @@
 							"type": "file"
 						},
 						{
-							"key": "test2_2",
+							"key": "test1_2",
 							"description": "",
 							"type": "file"
 						},
 						{
-							"key": "test3_3",
+							"key": "test2_3",
 							"description": "",
 							"type": "file"
+						},
+						{
+							"key": "test3_4",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "",
+							"value": "",
+							"description": "",
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -1270,7 +1282,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"record\"              : \"5ab0de04e6cb702228b23cb8\",\n    \"samplePreparation\"   : \"5abc074f41f7d01bb4ad5f54\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"test2\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
+					"raw": "{\n\t\"record\"              : \"5ab0de04e6cb702228b23cb8\",\n    \"samplePreparation\"   : \"5abc074f41f7d01bb4ad5f54\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"test2\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 4,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/record/sampleCollection",
@@ -1307,6 +1319,35 @@
 					]
 				},
 				"description": "format - "
+			},
+			"response": []
+		},
+		{
+			"name": "resetPassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"admin\",\n\t\"password\":\"admin\"\n\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/resetPassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"resetPassword"
+					]
+				}
 			},
 			"response": []
 		}

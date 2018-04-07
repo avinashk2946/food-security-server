@@ -39,7 +39,7 @@ exports.getRecord = function(req,res){
       params['_id'] = req.query._id;
     }
     models.recordModel.find(params)
-    .populate("plant supplier broker product")
+    .populate("plant supplier rawMaterial")
     .exec()
     .then(function(data){
       return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
