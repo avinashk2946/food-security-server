@@ -43,4 +43,7 @@ router.get('/loggedin',passport.authenticate('token', {session:false}), function
 router.get('/:id', function(req, res, next) {
   controllers.userCtrl.getUserBasicInfo(req, res);
 });
+router.post('/resetPassword', function(req, res, next) {
+  controllers.userCtrl.resetPassword(req, res);
+});
 module.exports = router;

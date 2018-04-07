@@ -180,22 +180,7 @@ exports.getUser = function(req, res) {
           return response.sendResponse(res, 200, "error", constants.messages.error.getUser, error);
         })
     }
-     //updating query object with plant
-       // Info : Used to get suppliers based on different parameter passed as query in url
-      //Paramerers :plant , Ex - <hostName>:3000?plant=<plantId>
-           
-    /*  if(req.query.plant) {
-        params["plants"] = {"$in":[req.query.plant]};
-      }
-      console.log("query string ---    ",params);
-      models.userModel.find(params,function(err,data){
-        if(err){
-          logger.error("getUser ", err);
-          return response.sendResponse(res,500,"error",constants.messages.error.fetchData,err);
-        }
-        return response.sendResponse(res,200,"success",constants.messages.success.fetchData,data);
-      })
-          */
+
   } catch (e) {
     logger.error("getUser  " + error);
   }
@@ -203,7 +188,7 @@ exports.getUser = function(req, res) {
 }
 
 //find user basicDetails
- exports.getUserBasicInfo = function(req,res){
+exports.getUserBasicInfo = function(req, res) {
   try {
     var params = {
       isDelete: false
@@ -213,21 +198,21 @@ exports.getUser = function(req, res) {
       params['_id'] = req.params.id;
     }
     models.userModel.find(params).select('firstName lastName  role  username')
-    .exec()
-    .then(function(data){
-      return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
-    })
-    .catch(function(err) {
+      .exec()
+      .then(function(data) {
+        return response.sendResponse(res, 200, "success", constants.messages.success.getData, data);
+      })
+      .catch(function(err) {
         logger.error("getUserBasicInfo ", err);
-        return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
-    })
-                 
-         
+        return response.sendResponse(res, 500, "error", constants.messages.error.getData, err);
+      })
+
+
   } catch (e) {
     logger.error("getUserBasicInfo ", e);
-    return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
+    return response.sendResponse(res, 500, "error", constants.messages.error.getData, err);
   }
-    }
+}
 
 exports.updateUser = function(req, res) {
   try {
@@ -330,7 +315,9 @@ exports.changePassword = function(req, res) {
     console.log("inside change passowrd  ");
     component.utility.validateNull(req, res, "body", "oldPassword", "newPassword");
     console.log(">>>>>>>>>> change passowrd  ");
-    userModel.findOne({"username": req.user._doc.username}).populate('role').exec(function(err, user) {
+    userModel.findOne({
+      "username": req.user._doc.username
+    }).populate('role').exec(function(err, user) {
       if (err) {
         logger.error("changePassword  " + err);
         return response.sendResponse(res, 402, "error", constants.messages.error.changePassword, err);
@@ -452,130 +439,42 @@ exports.forgotPassword = function(req, res) {
   }
 }
 
-exports.getDashboardData = function(req, res) {
-  var responseData = {
-    district: {
-      total: [],
-      covered: []
-    },
-    block: {
-      total: [],
-      covered: []
-    },
-    gp: {
-      total: [],
-      covered: []
-    },
-    vle: {
-      total: 0,
-      urban: 0,
-      gp: 0,
-    },
-  };
-  if(req.user._doc.role.type == "state-admin"){
-    // creating district
-    models.districtModel.find({})
-    //.count()
-    .distinct('_id')
-    .exec()
-    .then(function(districts) {
-      responseData.district.total = districts;
-      // get covered district
-      // var tempquery  = Object.assign({isCover: true}, query); // shallow copy
-      return models.districtModel.find({isCover: true}).distinct('_id').exec();
-    })
-    .then(function(districtCover) {
-      responseData.district.covered = districtCover;
-      // getting total block
-      return models.blockModel.find({district:{$in:responseData.district.total}}).distinct('_id').exec()
-    })
-    .then(function(blockCount) {
-      responseData.block.total = blockCount;
-      // getting covered block
-      var tempquery  = {isCover: true , district:{$in:responseData.district.total}};
-      return models.blockModel.find(tempquery).distinct('_id').exec()
-    })
-    .then(function(blockCovered) {
-      responseData.block.covered = blockCovered;
-      // getting  gp
-      return models.gpModel.find({block:{$in:responseData.block.total}}).distinct('_id').exec()
-    })
-    .then(function(gpCount) {
-      responseData.gp.total = gpCount;
-      // getting  covered gp
-      var tempquery  = {isCover: true , block:{$in:responseData.block.total}}
-      return models.gpModel.find(tempquery).distinct('_id').exec()
-    })
-    .then(function(gpcovered) {
-      responseData.gp.covered = gpcovered;
-      // getting  vle
-      // get vle details
-      var query = {};
-      if(req.user._doc.role.type != "state-admin"){
-        query.district = req.user._doc.district;
-      }
-      return models.vleModel.find(query).exec();
-    })
-    .then(function(vleData) {
-      responseData.vle.total = vleData.length;
-      vleData.filter(function(vle){
-        vle.urban ? responseData.vle.urban++ : responseData.vle.gp++ ;
-        // if(count >= vle.length){
-        //   return response.sendResponse(res, 200, "success", constants.messages.success.getData,responseData);
-        // }
-        return;
-      })
-      return response.sendResponse(res, 200, "success", constants.messages.success.getData,responseData);
-    })
 
+exports.resetPassword = function(req, res) {
+  try {
+    console.log("calling reset password");
+    // making encrypt password
+    password(req.body.password).hash(function(error, hash) {
+      req.body.password = hash;
+      console.log("req.body.password ");
+      var query = {
+        username : req.body.username
+      },
+      updateData = {
+        passowrd : req.body.password
+      },
+      option = {
+        new:true,
+        multi:true
+      };
+      console.log(query,updateData);
+       models.userModel.update(query,updateData,option,function(err,user) {
+        if(err) {
+          return response.sendResponse(res, 500, "error", constants.messages.error.saveData, error);
+        }
+        if(!user) {
+          // no user found
+          logger.error("no user found");
+          return response.sendResponse(res, 402, "error",constants.messages.error.dataNotFound);
+        }
+        else{
+          return response.sendResponse(res, 200, "success", constants.messages.success.saveData);
+        }
+      });
+    })
   }
-else{
-    // for district admin
-    models.blockModel.find({district: req.user._doc.district}).distinct('_id').exec()
-    .then(function(blockCount) {
-      responseData.block.total = blockCount;
-      // getting covered block
-      var tempquery  = {isCover: true , district: req.user._doc.district};
-      return models.blockModel.find(tempquery).distinct('_id').exec()
-    })
-    .then(function(blockCovered) {
-      responseData.block.covered = blockCovered;
-      // getting  gp
-      return models.gpModel.find({block:{$in:responseData.block.total}}).distinct('_id').exec()
-    })
-    .then(function(gpCount) {
-      responseData.gp.total = gpCount;
-      // getting  covered gp
-      var tempquery  = {isCover: true , block:{$in:responseData.block.total}}
-      return models.gpModel.find(tempquery).distinct('_id').exec()
-    })
-    .then(function(gpcovered) {
-      responseData.gp.covered = gpcovered;
-      // getting  vle
-      // response.sendResponse(res, 200, "success", constants.messages.success.getData,responseData);
-      // get vle details
-      return models.vleModel.find({district: req.user._doc.district}).exec();
-    })
-    .then(function(vleData) {
-      var count = 0;
-      responseData.vle.total = vleData.length;
-      vleData.filter(function(vle){
-
-        vle.urban ? responseData.vle.urban++ : responseData.vle.gp++ ;
-        count++;
-        // if(count >= vle.length){
-        //   return response.sendResponse(res, 200, "success", constants.messages.success.getData,responseData);
-        // }
-        return;
-      })
-      return response.sendResponse(res, 200, "success", constants.messages.success.getData,responseData);
-    })
-
+  catch(err) {
+    return response.sendResponse(res, 500, "error", constants.messages.error.saveData, err);
   }
 
-
-}
-exports.exportExcel = function(req,res) {
-  console.log("*******************  ",exportExcel);
-  component.utility.downloadXls(res,req.body.exportData,null,'vleList','vle');
 }
