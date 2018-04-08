@@ -202,13 +202,15 @@ exports.udpateRecord = function(req,res){
 exports.deleteRecord = function(req, res) {
   try {
     var query = {
-      "_id": req.params.id
+      "_id": {"$in":req.params.id.split(",")}
     }
     delete req.body['_id'];
-    models.recordModel.findOneAndUpdate(query, {
+    console.log("query  ",query);
+    models.recordModel.update(query, {
       "isDelete": true
     }, {
-      "new": true
+      "new": true,
+      "multi":true
     }, function(err, data) {
       if (err) {
         logger.error("deleteRecord ", err);
