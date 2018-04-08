@@ -219,6 +219,7 @@ exports.deleteRecord = function(req, res) {
 
   } catch (e) {
     logger.error("deleteRecord ", e);
+    return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
   }
 }
 
