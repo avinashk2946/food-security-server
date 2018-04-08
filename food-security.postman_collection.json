@@ -1350,6 +1350,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "delete-record",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/record/5ab0de04e6cb702228b23cb8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"record",
+						"5ab0de04e6cb702228b23cb8"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -199,6 +199,30 @@ exports.udpateRecord = function(req,res){
   }
 }
 
+exports.deleteRecord = function(req, res) {
+  try {
+    var query = {
+      "_id": req.params.id
+    }
+    delete req.body['_id'];
+    models.recordModel.findOneAndUpdate(query, {
+      "isDelete": true
+    }, {
+      "new": true
+    }, function(err, data) {
+      if (err) {
+        logger.error("deleteRecord ", err);
+        return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
+      } else
+        return response.sendResponse(res, 200, "success", constants.messages.success.deleteData);
+    })
+
+  } catch (e) {
+    logger.error("deleteRecord ", e);
+    return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
+  }
+}
+
 
 
 /**
