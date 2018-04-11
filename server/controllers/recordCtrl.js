@@ -230,13 +230,6 @@ exports.deleteRecord = function(req, res) {
       logger.error("deleteRecord ", e);
       return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
     })
-    // , function(err, data) {
-    //   if (err) {
-    //     logger.error("deleteRecord ", err);
-    //     return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
-    //   } else
-    //     return response.sendResponse(res, 200, "success", constants.messages.success.deleteData);
-    // })
 
   } catch (e) {
     logger.error("deleteRecord ", e);
@@ -274,7 +267,14 @@ exports.deleteRecord = function(req, res) {
      if(!req.body.record){
        return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
      }
-     new models.samplePreparaionModel(req.body).save()
+     var query = {
+       record: req.body.record
+     }
+     var option = {
+       new:true,
+       upsert:true,
+     }
+     models.samplePreparaionModel.findOneAndUpdate(query,req.body,option)
      .then(function(data) {
        // response.sendResponse(res,200,"success",constants.messages.success.saveRecord);
        // update record tab for sample preparation completed
@@ -378,8 +378,14 @@ exports.checkSupplierLot = function(req,res){
       if(!req.body.record || !req.body.samplePreparation){
         return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
       }
-
-      new models.sampleCollectionModel(req.body).save()
+      var query = {
+        record: req.body.record
+      }
+      var option = {
+        new:true,
+        upsert:true,
+      }
+      models.sampleCollectionModel.findOneAndUpdate(query,req.body,option)
       .then(function(data) {
          return response.sendResponse(res, 200,"success",constants.messages.success.saveData);
       })
@@ -430,15 +436,6 @@ exports.checkSupplierLot = function(req,res){
       .catch(function(err) {
         return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
       })
-      // new models.sampleCollectionModel(req.body).save()
-      // .then(function(data) {
-      //    return response.sendResponse(res, 200,"success",constants.messages.success.saveData);
-      // })
-      // .catch(function(err) {
-      //   console.log("updateRecord ", err);
-      //   logger.error("updateRecord ", err);
-      //   return response.sendResponse(res, 500,"error",constants.messages.error.saveData);
-      // })
 
     } catch (err) {
       console.log("updateRecord ", err);
