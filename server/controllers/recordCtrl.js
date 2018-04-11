@@ -204,20 +204,39 @@ exports.deleteRecord = function(req, res) {
     var query = {
       "_id": {"$in":req.params.id.split(",")}
     }
-    delete req.body['_id'];
+    // delete req.body['_id'];
     console.log("query  ",query);
-    models.recordModel.update(query, {
-      "isDelete": true
-    }, {
-      "new": true,
-      "multi":true
-    }, function(err, data) {
-      if (err) {
-        logger.error("deleteRecord ", err);
-        return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
-      } else
-        return response.sendResponse(res, 200, "success", constants.messages.success.deleteData);
+    models.recordModel.remove(query)
+    .then(function(recordDeleted) {
+      // deleted reocrd callback
+      // deleting dependency sample preparation
+      var query = {
+        "record": {"$in":req.params.id.split(",")}
+      }
+      return models.samplePreparaionModel.remove(query);
+      // return response.sendResponse(res, 200, "success", constants.messages.success.deleteData);
     })
+    .then(function(sPreparationDelete){
+      // deleting dependency sample collection
+      var query = {
+        "record": {"$in":req.params.id.split(",")}
+      }
+      return models.sampleCollectionModel.remove(query);
+    })
+    .then(function(sCollectionData) {
+      return response.sendResponse(res, 200, "success", constants.messages.success.deleteData);
+    })
+    .catch(function(err) {
+      logger.error("deleteRecord ", e);
+      return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
+    })
+    // , function(err, data) {
+    //   if (err) {
+    //     logger.error("deleteRecord ", err);
+    //     return response.sendResponse(res, 500, "error", constants.messages.error.deleteData, err);
+    //   } else
+    //     return response.sendResponse(res, 200, "success", constants.messages.success.deleteData);
+    // })
 
   } catch (e) {
     logger.error("deleteRecord ", e);
