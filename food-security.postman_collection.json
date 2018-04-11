@@ -213,7 +213,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "  {\r\n    \"plant\"                              : \"5aa580ef326ba4040cdac584\",\r\n    \"supplier\"                           : \"5aa5824b8067d717e0108f85\",\r\n    \"broker\"                             : \"5aa582ea8067d717e0108f89\",\r\n    \"country\"                            : \"Canada\",\r\n    \"rawMaterial\"                            : \"5ab60fc3ddf7d43510b2ef51\",\r\n    \r\n\r\n\r\n    \"po\"                                 : \"mango-01-chunked-02\",\r\n    \"containerNo\"                        : \"containerNo3\",\r\n    \"lotNo\"                              : \"lotNo3\",\r\n    \r\n    \"variety\"                            : [\"variety3\"]\r\n    \r\n   \r\n   \r\n  }"
+					"raw": "  {\r\n    \"plant\"                              : \"5aa580ef326ba4040cdac584\",\r\n    \"supplier\"                           : \"5aa5824b8067d717e0108f85\",\r\n    \"broker\"                             : \"5aa582ea8067d717e0108f89\",\r\n    \"country\"                            : \"usa\",\r\n    \"rawMaterial\"                            : \"5ab60fc3ddf7d43510b2ef51\",\r\n     \"po\"                                 : \"mango-01-chunked-06\",\r\n    \"containerNo\"                        : \"containerNo3\",\r\n    \"lotNo\"                              : \"lotNo3\",\r\n    \"variety\"                            : [\"variety3\"]\r\n    \r\n  }"
 				},
 				"url": {
 					"raw": "http://localhost:3000/record",
@@ -411,11 +411,19 @@
 			"response": []
 		},
 		{
-			"name": "record-Update",
+			"name": "record-Update-PUT",
 			"request": {
 				"method": "PUT",
-				"header": [],
-				"body": {},
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \"plant\"                              : \"5aa580ef326ba4040cdac584\",\r\n    \"supplier\"                           : \"5aa5824b8067d717e0108f85\",\r\n    \"broker\"                             : \"5aa582ea8067d717e0108f89\",\r\n    \"country\"                            : \"usa\",\r\n    \"rawMaterial\"                            : \"5ab60fc3ddf7d43510b2ef51\",\r\n     \"po\"                                 : \"mango-01-chunked-06\",\r\n    \"containerNo\"                        : \"containerNo3\",\r\n    \"lotNo\"                              : \"lotNo3\",\r\n    \"variety\"                            : [\"variety3\"]\r\n    \r\n  }"
+				},
 				"url": {
 					"raw": "http://localhost:3000/record",
 					"protocol": "http",
@@ -1120,7 +1128,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"record\"              : \"5ab0de04e6cb702228b23cb8\",\n    \"samples\" : [\n      {\n        \"supplierLot\"         :\"testLot1\",\n        \"newLot\"              :\"true\",\n        \"po\"                  :\"po1\",\n        \"totalQuantity\"       : 10,\n        \"quantityPlanned\"       :10,\n        \"qualityAnalysis\"     :false,\n\n       \n        \"indicatorTest\"       :false,\n        \"pathogenTest\"      :false,\n        \"virusTest\"      :false,\n        \"pesticideTest\"       :false,\n\t\t\"comment\":\"sample commwent\"\n        \n\n      },\n      {\n        \"supplierLot\"         :\"testLot2\",\n        \"newLot\"              :\"true\",\n        \"po\"                  :\"po2\",\n        \"totalQuantity\"       : 10,\n        \"quantityPlanned\"       :10,\n        \"qualityAnalysis\"     :false,\n\n       \n        \"indicatorTest\"       :false,\n        \"pathogenTest\"      :false,\n        \"virusTest\"      :false,\n        \"pesticideTest\"       :false,\n        \"comment\":\"sample commwent\"\n\n        \n\n      }\n    ]\n}"
+					"raw": "{\n\t\"record\"              : \"5ace700b2be70512e443c99e\",\n    \"samples\" : [\n      {\n        \"supplierLot\"         :\"11111\",\n        \"newLot\"              :\"true\",\n        \"po\"                  :\"po1\",\n        \"totalQuantity\"       : 10,\n        \"quantityPlanned\"       :10,\n        \"qualityAnalysis\"     :false,\n\n       \n        \"indicatorTest\"       :false,\n        \"pathogenTest\"      :false,\n        \"virusTest\"      :false,\n        \"pesticideTest\"       :false,\n\t\t\"comment\":\"sample commwent\"\n        \n\n      },\n      {\n        \"supplierLot\"         :\"444444\",\n        \"newLot\"              :\"true\",\n        \"po\"                  :\"po2\",\n        \"totalQuantity\"       : 10,\n        \"quantityPlanned\"       :10,\n        \"qualityAnalysis\"     :false,\n\n       \n        \"indicatorTest\"       :false,\n        \"pathogenTest\"      :false,\n        \"virusTest\"      :false,\n        \"pesticideTest\"       :false,\n        \"comment\":\"sample commwent\"\n\n        \n\n      }\n    ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/record/samplePreparation",
@@ -1152,7 +1160,7 @@
 					"formdata": [
 						{
 							"key": "_id",
-							"value": "5ac69ffd1deb6b0d8030489e",
+							"value": "5accfc1a7360ce16ac0d4669",
 							"description": "",
 							"type": "text"
 						},
@@ -1255,7 +1263,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:3000/record/samplePreparation/5ab0de04e6cb702228b23cb8",
+					"raw": "http://localhost:3000/record/samplePreparation/5ace619ab0aa281368917181",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1264,7 +1272,7 @@
 					"path": [
 						"record",
 						"samplePreparation",
-						"5ab0de04e6cb702228b23cb8"
+						"5ace619ab0aa281368917181"
 					]
 				}
 			},
@@ -1282,7 +1290,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"record\"              : \"5ab0de04e6cb702228b23cb8\",\n    \"samplePreparation\"   : \"5abc074f41f7d01bb4ad5f54\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"test2\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 4,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
+					"raw": "{\n\t\"record\"              : \"5ace700b2be70512e443c99e\",\n    \"samplePreparation\"   : \"5ace71930d8058dace264e83\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"test2\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 4,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/record/sampleCollection",
@@ -1358,7 +1366,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:3000/record/5ab0e0ffe6cb702228b23cbc,5aaccae17af3f71850dd878a",
+					"raw": "http://localhost:3000/record/5ace61acb0aa281368917182,5ace619ab0aa281368917181",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1366,7 +1374,35 @@
 					"port": "3000",
 					"path": [
 						"record",
-						"5ab0e0ffe6cb702228b23cbc,5aaccae17af3f71850dd878a"
+						"5ace61acb0aa281368917182,5ace619ab0aa281368917181"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "record-update-2-PUT",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"_id\": \"5ace6ca32be70512e443c99d\",\n            \"plant\": {\n                \"_id\": \"5aa580ef326ba4040cdac584\",\n                \"plantId\": \"plantId1\",\n                \"name\": \"testPlant1\",\n                \"fax\": \"1111111\",\n                \"phone\": \"111111111\",\n                \"__v\": 0,\n                \"createdDate\": \"2018-03-11T18:14:17.747Z\",\n                \"isDelete\": false,\n                \"pin\": \"111111\",\n                \"city\": \"city1\",\n                \"state\": \"state1\",\n                \"country\": \"country1\"\n            },\n            \"supplier\": {\n                \"_id\": \"5aa5824b8067d717e0108f85\",\n                \"name\": \"testSupp1\",\n                \"id\": \"testSupp1\",\n                \"phone\": \"1111111111\",\n                \"contactSalutation\": \"Mr\",\n                \"contactFirstName\": \"testSupp1\",\n                \"__v\": 0,\n                \"isDelete\": false,\n                \"createdDate\": \"2018-03-11T19:20:50.385Z\",\n                \"address\": [\n                    {\n                        \"city\": \"city1\",\n                        \"region\": \"reg1\",\n                        \"state\": \"state1\",\n                        \"pin\": \"pin1\",\n                        \"country\": \"country1\",\n                        \"_id\": \"5aa5824b8067d717e0108f86\"\n                    }\n                ],\n                \"plants\": [\n                    \"5aa580ef326ba4040cdac584\"\n                ]\n            },\n            \"broker\": {\n                \"_id\": \"5aa582ea8067d717e0108f89\",\n                \"name\": \"testbroker1\",\n                \"plants\": [\n                    \"5aa580ef326ba4040cdac584\"\n                ],\n                \"__v\": 0,\n                \"createdDate\": \"2018-03-11T19:20:50.378Z\",\n                \"isDelete\": false,\n                \"address\": [\n                    {\n                        \"city\": \"city1\",\n                        \"region\": \"region1\",\n                        \"state\": \"state1\",\n                        \"pin\": \"111111111\",\n                        \"country\": \"India\",\n                        \"_id\": \"5aa582ea8067d717e0108f8a\"\n                    }\n                ],\n                \"suppliers\": [\n                    \"5aa5824b8067d717e0108f85\"\n                ]\n            },\n            \"country\": \"ggggggg\",\n            \"rawMaterial\": {\n                \"_id\": \"5ab60fc3ddf7d43510b2ef51\",\n                \"plant\": \"5ab09405e6cb702228b23c70\",\n                \"supplier\": \"5ab09e78e6cb702228b23c77\",\n                \"broker\": \"5ab0b5d3e6cb702228b23c91\",\n                \"rmGroupName\": \"Mango\",\n                \"name\": \"Mango Chunk\",\n                \"rmCode\": \"MANRAW\",\n                \"format\": \"Mango Chunk 8300lbs\",\n                \"country\": \"peru\",\n                \"__v\": 0,\n                \"isDelete\": false,\n                \"createdDate\": \"2018-03-24T08:02:51.122Z\",\n                \"pesticideTest\": false,\n                \"virusTest\": false,\n                \"pathogenTest\": false,\n                \"samplingMethod\": false,\n                \"certification\": false,\n                \"nonGmo\": false,\n                \"organic\": false,\n                \"kosher\": false,\n                \"isApproved\": true,\n                \"variety\": [\n                    \"Sliced\",\n                    \"Chunk\",\n                    \"Kent\"\n                ]\n            },\n            \"po\": \"mango-01-chunked-100\",\n            \"containerNo\": \"containerNo3\",\n            \"lotNo\": \"lotNo3\",\n            \"__v\": 0,\n            \"createdDate\": \"2018-04-11T19:32:12.723Z\",\n            \"isDelete\": false,\n            \"isQualityAnalysis\": false,\n            \"isSampleCollection\": false,\n            \"isSamplePreparation\": false,\n            \"isSetDocument\": false,\n            \"variety\": [\n                \"variety3\",\n                \"variety3\",\n                \"variety3\"\n            ],\n            \"otherSupporting\": [],\n            \"environmentalMonitoring\": [],\n            \"ccpVerification\": [],\n            \"coa\": [],\n            \"packingList\": [],\n            \"commercialInvoice\": [],\n            \"billOfLanding\": [],\n            \"approved\": false\n        }"
+				},
+				"url": {
+					"raw": "http://localhost:3000/record",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"record"
 					]
 				}
 			},
