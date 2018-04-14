@@ -54,6 +54,8 @@ var constants = {
       "recordIdRequired" : "Record Id Required",
       "record_Supp_idRequired" : "Record or supplier Id required",
       "sampleCollectionIdRequired" : "Sample Collection Id required",
+      "imageUpload"     : "Error in upload Image",
+      "sampleLimit"     : "Sample Limit crossed",
 
       },
     success:{

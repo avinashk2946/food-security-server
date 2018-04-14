@@ -4,6 +4,8 @@ var Schema = mongoose.Schema;
 var router = express.Router();
 var bodyParser = require('body-parser');
 var colors = require('colors');
+var config = require('config');
+var component = require("./../component");
 var response = require("./../component/response");
 var models = require("./../models/index");
 var constants = require("./../../config/constants");
@@ -372,6 +374,130 @@ exports.checkSupplierLot = function(req,res){
 
 
   // used to save corresponding case image defined during sample preparation
+  exports.saveSampleCollection2 = function(req,res){
+    try{
+
+      var selectedSamplePreparation ;
+      var uploadPath = config.get(config.get("env")+".uploadPath")+"/sampleCollection";
+      if(!req.body.record || !req.body.samplePreparation){
+        return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
+      }
+      var query = {
+        _id : req.body.samplePreparation,
+        record : req.body.record
+      }
+      models.samplePreparaionModel.findOne(query).exec()
+      .then(function(samplePreparation) {
+        if(!samplePreparation) {
+          return response.sendResponse(res, 402,"error",constants.messages.error.dataNotFound);
+        }
+        selectedSamplePreparation = samplePreparation;
+        // check if to add or update sample collection , sampleCollection == null -> create new record else update
+        if(!req.body.sampleCollection){
+          // remove if any sample collection present under this record and sample collection id
+          // uplod case img
+          // add new record
+          models.sampleCollectionModel.remove({record : req.body.record},function(err,deletedSampleCollection) {
+            if(err)
+            {
+              throw err;
+            }
+            component.utility.uploadImage({
+              base64: req.body.base64,
+              fileName: req.body.fileName
+            },uploadPath, function(err, imagePath) {
+              if (err) {
+                logger.error("udpateUser  " + err);
+                return response.sendResponse(res, 500,"error",constants.messages.error.imageUpload,err);
+              }
+              req.body.caseImg = imagePath;
+              // creting new sample collection record
+              var obj = {
+                record : req.body.record,
+                samplePreparation : req.body.samplePreparation,
+                samples : [req.body] // here record,samplePreparation in body will be skipped as not mentioned in sample schema structure
+              }
+              new models.sampleCollectionModel(obj).save(function (err,data) {
+                if(err) {
+                  return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
+                }
+                else{
+                  return response.sendResponse(res, 200,"success",constants.messages.success.saveData,data);
+                }
+              })
+            })
+          })
+
+        }
+        else{
+          // update to be done for sample collection
+          models.sampleCollectionModel.findById(req.body.sampleCollection).exec()
+          .then(function(sampleCollectionData) {
+            if(!sampleCollectionData) {
+              return response.sendResponse(res, 402,"error",constants.messages.error.dataNotFound+" sampleCollection");
+            }
+            var samplePlannedCount = getSampledPlannedByLot(req.body.supplierLot,selectedSamplePreparation)
+            var presentSampleCount = getPresentSampleCount(req.body.supplierLot,sampleCollectionData);
+            console.log("samplePlannedCount  ",samplePlannedCount);
+            console.log("presentSampleCount  ",presentSampleCount);
+            if(presentSampleCount < samplePlannedCount) {
+              // update by insert sample
+              component.utility.uploadImage({
+                base64: req.body.base64,
+                fileName: req.body.fileName
+              },uploadPath, function(err, imagePath) {
+                if (err) {
+                  logger.error("udpateUser  " + err);
+                  return response.sendResponse(res, 500,"error",constants.messages.error.imageUpload,err);
+                }
+                req.body.caseImg = imagePath;
+                sampleCollectionData.samples.push(req.body);
+                sampleCollectionData.save(function(err,data) {
+                  if(err) {
+                    throw err;
+                  }
+                  return response.sendResponse(res, 200,"success",constants.messages.success.updateData);
+                })
+              })
+            }
+            else{
+              return response.sendResponse(res, 402,"error",constants.messages.error.sampleLimit);
+            }
+          })
+          .catch(function(err) {
+            throw err;
+          })
+        }
+        // return response.sendResponse(res, 200,"success",samplePreparation);
+      })
+      .catch(function(err) {
+          throw err;
+      })
+
+    }
+    catch(err) {
+      return response.sendResponse(res, 500,"error",constants.messages.error.getData,err);
+    }
+
+  }
+
+  function getSampledPlannedByLot(supplierLot,selectedSamplePreparation){
+    for(var i in selectedSamplePreparation.samples){
+      if(selectedSamplePreparation.samples[i].supplierLot == supplierLot) {
+        return selectedSamplePreparation.samples[i].quantityPlanned
+      }
+    }
+    return 0; // for not found
+  }
+  function getPresentSampleCount(supplierLot,sampleCollection){
+    var count = 0;
+    for(var i in sampleCollection.samples){
+      if(sampleCollection.samples[i].supplierLot == supplierLot) {
+        count++;
+      }
+    }
+    return count; // for not found
+  }
   exports.saveSampleCollection = function(req,res){
     try {
       // validation goes here

@@ -7,7 +7,7 @@ var sampleCollectionSchema = new mongoose.Schema({
     samplePreparation   : {type: Schema.Types.ObjectId,required:true, ref: 'samplePreparation'}, // will be used for validation with samplePreparation
     samples : [
       {
-        index               :{type:Number,required:true}, // to identify sequence of records
+        // index               :{type:Number}, // need to remove later on if not neccessary
         supplierLot         :{type:String,required:true},
         caseImg              :{type:String,default:""},
         qualityAnalysis      : {type:Boolean,default:false},

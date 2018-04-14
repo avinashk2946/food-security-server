@@ -26,7 +26,7 @@ exports.addConfig = function(req, res) {
           component.utility.uploadImage({
             base64: req.body.backgroundImg,
             fileName: req.body.backgroundImgName
-          }, function(err, imagePath) {
+          } , null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
               callback(err);
@@ -46,7 +46,7 @@ exports.addConfig = function(req, res) {
           component.utility.uploadImage({
             base64: req.body.logoImg,
             fileName: req.body.logoImgName
-          }, function(err, imagePath) {
+          },null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
               callback(err);
@@ -130,7 +130,7 @@ exports.udpateConfig = function(req, res) {
           component.utility.uploadImage({
             base64: req.body.backgroundImg,
             fileName: req.body.backgroundImgName
-          }, function(err, imagePath) {
+          },null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
               callback(err);
@@ -150,7 +150,7 @@ exports.udpateConfig = function(req, res) {
           component.utility.uploadImage({
             base64: req.body.logoImg,
             fileName: req.body.logoImgName
-          }, function(err, imagePath) {
+          },null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
               callback(err);

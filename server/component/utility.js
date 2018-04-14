@@ -1,8 +1,8 @@
 var constants = require('./../../config/constants');
 var response = require("./../component/response");
 var LOG = require('./../component/LOG');
+var fs = require('fs');
 var models = require('./../models/index');
-
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var moment = require('moment');
@@ -162,8 +162,14 @@ utility.getDateFormat = function(date) {
   return (date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString());
 }
 
-utility.uploadImage = function(imageDetail, callback) {
-  var imagePath = config.get(config.get('env') + ".uploadPath") + "/" + Date.now() + "_" + imageDetail.fileName;
+utility.uploadImage = function(imageDetail,path, callback) {
+  var uploadPath = path || config.get(config.get('env') + ".uploadPath"); // to get dynamically path
+  // sample collection folder
+  if (!fs.existsSync(uploadPath) ) { // upload folder
+      fs.mkdirSync(uploadPath);
+  }
+
+  var imagePath = uploadPath + "/" + Date.now() + "_" + imageDetail.fileName;
   require('fs').writeFile(imagePath, imageDetail.base64, {
     encoding: 'base64'
   }, function(err, data) {
