@@ -1290,7 +1290,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"record\"              : \"5ace700b2be70512e443c99e\",\n    \"samplePreparation\"   : \"5ace71930d8058dace264e83\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"test1\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"test2\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 4,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
+					"raw": "{\n\t\"record\"              : \"5ace700b2be70512e443c99e\",\n    \"samplePreparation\"   : \"5ace71930d8058dace264e83\",\n    \"samples\" : [\n      {\n        \"index\"               : 1,\n        \"supplierLot\"         :\"111111\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 2,\n        \"supplierLot\"         :\"2222222\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 3,\n        \"supplierLot\"         :\"333333\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      },\n      {\n        \"index\"               : 4,\n        \"supplierLot\"         :\"test3\",\n        \"qualityAnalysis\"      : false,\n        \"testGrp\"      : false,\n        \"pesticideTest\"      : false,\n        \"comment\"          :\"sdsfsf\"\n      }\n      \n    ]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/record/sampleCollection",
@@ -1403,6 +1403,58 @@
 					"port": "3000",
 					"path": [
 						"record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetPassword-verifyEmail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/user/resetPassword/verifyEmail/rajendra.sahoo@smartfoodsafe.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"resetPassword",
+						"verifyEmail",
+						"rajendra.sahoo@smartfoodsafe.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resetPassword-resetPasswordByToken",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"resetPasswordToken\" : \"pbkdf2$10000$739470bb6648eded592974b229e9c6abcb4cc45921c41f739f4a2587d979901cef042f987689bad24304a36472bc79c0b3c7d85fd7a7af809165aabd7914608f$3c1fa29ae1dcc53bd0052d200120eed90cf450f622074af2b0bc037e15ba1d4b794b79fda22a68076dbe254d9e11c28193a09f190884186c97a07910380e4872\",\n\t\"password\":\"test1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/resetPasswordByToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"resetPasswordByToken"
 					]
 				}
 			},
