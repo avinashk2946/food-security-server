@@ -17,20 +17,23 @@ utility.isEmpty = function(data) {
   }
 }
 utility.sendVerificationMail = function(userObj, callback) {
-  // var transporter = nodemailer.createTransport("SMTP", {
-  //   service: "Gmail",
-  //   auth: {
-  //     user: constants.gmailSMTPCredentials.username,
-  //     pass: constants.gmailSMTPCredentials.password
-  //   }
-  //   // host: 'smtp.goappssolutions.com',
-  //   // port: 587,
-  //   // secure: false, // upgrade later with STARTTLS
-  //   // auth: {
-  //   //     user: 'rajendra',
-  //   //     pass: 'infy@123'
-  //   // }
-  // });
+  if(!userObj.email) {
+    return callback(new Error("Invalid Email"),null);
+  }
+  var transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: constants.gmailSMTPCredentials.username,
+      pass: constants.gmailSMTPCredentials.password
+    }
+    // host: 'smtp.goappssolutions.com',
+    // port: 587,
+    // secure: false, // upgrade later with STARTTLS
+    // auth: {
+    //     user: 'rajendra',
+    //     pass: 'infy@123'
+    // }
+  });
   // transporter = nodemailer.createTransport({
   //   SES: new aws.SES({
   //     apiVersion: '2010-12-01'
@@ -45,50 +48,41 @@ utility.sendVerificationMail = function(userObj, callback) {
   // });
 
 
-  var transporter = nodemailer.createTransport("SMTP", {
-    host: "email-smtp.us-east-1.amazonaws.com",
-    secureConnection: true,
-    port: 465,
-    auth: {
-      user: "AKIAJQ645MHEM3FQ25UA",
-      pass: "AlwqDZB59eCXQvpSZ44gsuVkTCfo3s/5yLL7I+6CnO9d"
+  // var transporter = nodemailer.createTransport("SMTP", {
+  //   host: "email-smtp.us-east-1.amazonaws.com",
+  //   secureConnection: true,
+  //   port: 465,
+  //   auth: {
+  //     user: "AKIAJQ645MHEM3FQ25UA",
+  //     pass: "AlwqDZB59eCXQvpSZ44gsuVkTCfo3s/5yLL7I+6CnO9d"
+  //   }
+  // });
+
+  // udpate data as per the user input
+  console.log("constants.emailTemplate  ",constants.emailTemplate);
+  var mailOptions = {
+    from: constants.gmailSMTPCredentials.mailUsername + "<" + constants.gmailSMTPCredentials.verificationMail + ">",
+    // to: userObj.email,
+    transport: transporter,
+    to: userObj.email,
+    subject: constants.emailTemplate['resetPassword'].header,
+    text: constants.emailTemplate['resetPassword'].content
+      .replace(/{{name}}/g, userObj.name)
+      .replace(/{{resetUrl}}/g, constants.uiUrl.resetPasswordUrl+"?resetPasswordToken="+userObj.resetPasswordToken)
+
+  }
+  //LOG.info(JSON.stringify(mailOptions));
+  console.log("before email mailOptions ",mailOptions);
+  // verify connection configuration
+  transporter.sendMail(mailOptions, function(err, res) {
+    if (err) {
+      console.log("Message sent: Error" + err.message);
+      callback(err, null)
+    } else {
+      console.log("Message sent: " + res);
+      callback(null, true)
     }
   });
-
-  // getting template details
-  models.templateModel.findOne({type:userObj.templateType}).exec()
-  .then(function(template) {
-    // udpate data as per the user input
-    var mailOptions = {
-      from: constants.gmailSMTPCredentials.mailUsername + "<" + constants.gmailSMTPCredentials.verificationMail + ">",
-      // to: userObj.email,
-      transport: transporter,
-      to: userObj.email,
-      subject: template.header,
-      text: template.htmlcontent
-        .replace(/{{name}}/g, userObj.name)
-        .replace(/{{email}}/g, userObj.email)
-        .replace(/{{password}}/g, userObj.password)
-        .replace(/{{mobile}}/g, userObj.mobile)
-        .replace(/{{company}}/g, userObj.company)
-        .replace(/{{referredBy}}/g, userObj.referredBy)
-        .replace(/{{signUpUrl}}/g, userObj.signUpUrl)
-    }
-    LOG.info(JSON.stringify(mailOptions));
-    // verify connection configuration
-    nodemailer.sendMail(mailOptions, function(err, res) {
-      if (err) {
-        console.log("Message sent: Error" + err.message);
-        callback(err, null)
-      } else {
-        console.log("Message sent: " + res);
-        callback(null, true)
-      }
-    });
-  })
-  .catch(function(err) {
-    LOG.error("Error in sending mail ",err)
-  })
 
 
 }

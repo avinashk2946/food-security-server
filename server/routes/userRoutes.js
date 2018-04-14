@@ -46,4 +46,11 @@ router.get('/:id', function(req, res, next) {
 router.post('/resetPassword', function(req, res, next) {
   controllers.userCtrl.resetPassword(req, res);
 });
+router.get('/resetPassword/verifyEmail/:email', function(req, res, next) {
+  controllers.userCtrl.verifyEmail(req, res);
+});
+router.post('/resetPasswordByToken', function(req, res, next) {
+  controllers.userCtrl.resetPasswordByToken(req, res);
+});
+
 module.exports = router;

@@ -24,6 +24,7 @@ var userSchema = new mongoose.Schema({
     city          :  {type: String, default:"NA"},
     pin          :  {type: String, default:"NA"},
 
+    resetPasswordToken: {type: String, default:"null"},
     isDelete          : {type: Boolean, default:false},
 });
 userSchema.plugin(uniqueValidator, {message: "User Already Exist !"});

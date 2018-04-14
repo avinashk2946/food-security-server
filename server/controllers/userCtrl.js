@@ -18,6 +18,7 @@ var waterfall = require('async-waterfall');
 // var async = require('async');
 var utility = require('./../component/utility');
 var passwordHash = require('password-hash-and-salt');
+
 /*
  * this will be executed if authentication passes
  */
@@ -446,7 +447,6 @@ exports.resetPassword = function(req, res) {
     // making encrypt password
     password(req.body.password).hash(function(error, hash) {
       req.body.password = hash;
-      console.log("req.body.password ");
       var query = {
         username : req.body.username
       },
@@ -477,5 +477,90 @@ exports.resetPassword = function(req, res) {
   catch(err) {
     return response.sendResponse(res, 500, "error", constants.messages.error.saveData, err);
   }
+
+}
+
+/**
+ * functionName :verifyEmail
+ * Info : Used to reset passowrd verify mail and activate password encryption
+ * input :email
+ */
+exports.verifyEmail = function(req, res) {
+  try {
+    var userData;
+    models.userModel.find({email:req.params.email}).exec()
+    .then(function(user) {
+      if(!user.length) {
+        return response.sendResponse(res, 402, "error", constants.messages.error.invalidEmail);
+      }
+      userData = user[0]
+      // generate resetPassword token
+      password(user.username+new Date()).hash(function(error, hash) {
+        var query = {
+          username:userData.username
+        },
+        update = {
+          resetPasswordToken:hash
+        },
+        option = {
+          new:true,
+          multi:true
+        };
+        models.userModel.findOneAndUpdate(query,update,option,function(err,user) {
+          // send mail with the token
+          var userObj = {
+            name:userData.firstName,
+            email: userData.email,
+            resetPasswordToken : userData.resetPasswordToken
+          }
+
+          utility.sendVerificationMail(userObj,function(err,data) {
+            if(err) {
+              console.error(err);
+              return response.sendResponse(res, 402, "error", err);
+            }
+            else{
+              return response.sendResponse(res, 200, "success", constants.messages.success.resetPasswordMailSent);
+            }
+          })
+
+        })
+      })
+
+    })
+    .catch(function(err) {
+        return response.sendResponse(res, 500, "error", constants.messages.error.saveData, err);
+    })
+  }
+  catch(err) {
+    return response.sendResponse(res, 500, "error", constants.messages.error.saveData, err);
+  }
+
+}
+
+exports.resetPasswordByToken = function(req, res) {
+  if(!req.body.resetPasswordToken || !req.body.password){
+    return response.sendResponse(res, 402, "error", constants.messages.error.invalidInput);
+  }
+  password(req.body.password).hash(function(error, hash) {
+    var query = {
+      resetPasswordToken: req.body.resetPasswordToken,
+    },
+    update = {
+      resetPasswordToken : null,
+      password:hash
+    },
+    option = {
+      new:true,
+    };
+    // models.userModel.find(query).exec()
+    // .then(function(user) {
+    //   return response.sendResponse(res, 200, "success", constants.messages.success.saveData,user);
+    // })
+    models.userModel.findOneAndUpdate(query,update,option,function(err,user) {
+      console.log("update passowrd ",user);
+      return response.sendResponse(res, 200, "success", constants.messages.success.saveData);
+    })
+  })
 
 }

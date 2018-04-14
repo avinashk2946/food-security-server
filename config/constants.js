@@ -26,9 +26,11 @@ var constants = {
       "customerExist":"Customer  already exists !",
       "saveUser" : "Error in save user",
       "undefinedEmail" : "Email required",
+      "invalidEmail" : "Invalid Email",
       "undefinedPlantId" : "Plant id is required",
       "undefinedSalutation" : "Salutation is required",
       "undefinedFirstName" : "First Name is required",
+      "invalidInput" :"Invalid Input",
 
       //plant
 
@@ -67,7 +69,7 @@ var constants = {
 
       //user
       "saveUser" : "Save User success",
-
+      "resetPasswordMailSent" : "Verification mail sent for reset password",
       //plant
       "savePlant" : "plant saved",
 
@@ -82,6 +84,25 @@ var constants = {
 
     },
   },
+  gmailSMTPCredentials :{
+    username:"rajendrasahoodbpb",
+    password:"Dbpb*raju1987",
+    mailUsername:"smartfoodsafe",
+    verificationMail:"admin@smartfoodsafe.com"
+  },
+  uiUrl:{
+    resetPasswordUrl : config.get(config.get("env")+".clientHost")+"/resetPassword"
+  },
+  emailTemplate : {
+    resetPassword :{
+      header : "Reset password",
+
+      content : `Hello {{name}} , \n
+                      Kindly click on the below link to reset password\n
+                      {{resetUrl}}
+                                  `
+    }
+  }
 
 }
 module.exports = constants;
