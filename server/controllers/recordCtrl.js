@@ -10,7 +10,7 @@ var response = require("./../component/response");
 var models = require("./../models/index");
 var constants = require("./../../config/constants");
 var logger = require("./../component/log4j").getLogger('recordCtrl');
-
+var waterfall = require('async-waterfall');
 
 exports.addRecord = function(req,res){
   try {
@@ -56,9 +56,10 @@ exports.getRecord = function(req,res){
 }
 
 
-exports.getSearch = function(req, res) {
+exports.getSearch2 = function(req, res) {
   try {
     var query = {};
+    var plants = [],suppliers = [],brokers = [],rawMaterial = [];
     if(req.params.search == "false" || req.params.search == "true") {
       if(req.params.search == "false")
       req.params.search = false;
@@ -104,18 +105,247 @@ exports.getSearch = function(req, res) {
     models.recordModel.find(query,function(err, data)
     {
 
-                  if(err){
-                    logger.error("getSearch ", err);
-                    return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
-                  }
-                  return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
+      if(err){
+        logger.error("getSearch ", err);
+        return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
+      }
+      return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
      })
-  } catch (e) {
-    logger.error("getSearch " + error);
+  } catch (err) {
+    logger.error("getSearch " + err);
 
   }
 }
+exports.getSearch = function(req, res) {
+  try{
+    var query = {};
+    waterfall([
+      function(callback){
+        // get related plant ids start
+        query["$or"] = [
+          //give input as country show as output that field which is related country
+          {plantId : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {name : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          //give input as containerNo show as output that field which is related containerNo
+          {country : {
+            $regex:req.params.search , $options: 'i' }
+          },
 
+          //give input as lotNo show as output that field which is related lotNo
+          {state  : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          //give input as po  show as output that field which is related po
+          {city    : {
+            $regex:req.params.search , $options: '' }
+          },
+          //give input as variety show as output that field which is related variety
+          {pin  : {
+            $regex:req.params.search , $options: 'i' }
+          }
+
+        ]
+        models.plantModel.find(query).distinct("_id").exec()
+        .then(function(plants) {
+          callback(null, plants);
+        }) // get related plant ids ends
+        .catch(function(err) {
+          logger.error(err);
+          callback(err, plants);
+        })
+      },
+      function(plants, callback){
+        // get related supplier ids
+        query["$or"] = [
+          {name : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {id : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {phone : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.city" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.region" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.state" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.pin" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.country" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"contactFirstName" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"contactLastName" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"contactPosition" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"contactEmail" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"contact24Hour" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+
+
+        ]
+        models.supplierModel.find(query).distinct("_id").exec()
+        .then(function(suppliers) {
+          callback(null, plants,suppliers);
+        }) // get related plant ids ends
+        .catch(function(err) {
+          logger.error(err);
+          callback(err, plants,suppliers);
+        })
+      },
+      function(plants,suppliers, callback){
+        // get related broker ids
+        query["$or"] = [
+          {name : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.city" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.region" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.state" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.pin" : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {"address.country" : {
+            $regex:req.params.search , $options: 'i' }
+          }
+        ]
+        models.brokerModel.find(query).distinct("_id").exec()
+        .then(function(brokers) {
+          callback(null, plants,suppliers,brokers);
+        }) // get related plant ids ends
+        .catch(function(err) {
+          logger.error(err);
+          callback(err, plants,suppliers,brokers);
+        })
+      },
+      function(plants,suppliers,brokers, callback){
+        // get related  rawMaterial ids
+        query["$or"] = [
+          {rmGroupName : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {name : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {rmCode : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {format : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {variety : {
+            $regex:req.params.search , $options: 'i' }
+          },
+          {country : {
+            $regex:req.params.search , $options: 'i' }
+          }
+
+        ]
+        models.rawMaterialModel.find(query).distinct("_id").exec()
+        .then(function(rawMaterials) {
+          callback(null, plants,suppliers,brokers,rawMaterials);
+        }) // get related plant ids ends
+        .catch(function(err) {
+          logger.error(err);
+          callback(err, plants,suppliers,brokers,rawMaterials);
+        })
+      },
+      function(plants,suppliers,brokers,rawMaterials, callback){
+        console.log("plants ",plants);
+        console.log("suppliers ",suppliers);
+        console.log("brokers ",brokers);
+        console.log("rawMaterials ",rawMaterials);
+        //getting records
+        var query = {};
+        query["$or"] = [
+        {
+          plant:{"$in":plants}
+        },
+        {
+          supplier:{"$in":suppliers}
+        },
+        {
+          broker:{"$in":brokers}
+        },
+        {
+          rawMaterial:{"$in":rawMaterials}
+        },
+        //give input as country show as output that field which is related country
+        {country : {
+          $regex:req.params.search , $options: 'i' }
+        },
+        //give input as containerNo show as output that field which is related containerNo
+        {containerNo : {
+          $regex:req.params.search , $options: 'i' }
+        },
+
+        //give input as lotNo show as output that field which is related lotNo
+        {lotNo  : {
+          $regex:req.params.search , $options: 'i' }
+        },
+        //give input as po  show as output that field which is related po
+       {po    : {
+          $regex:req.params.search , $options: '' }
+        },
+        //give input as variety show as output that field which is related variety
+        {variety  : {
+          $regex:req.params.search , $options: 'i' }
+        }
+
+       ]
+
+	   models.recordModel.find(query)
+     .populate("plant supplier broker rawMaterial")
+     .exec()
+     .then(function(data){
+       callback(null,data)
+     })
+     .catch(function(err) {
+         callback(err,null)
+     })
+
+
+      }
+    ], function (err, data) {
+      if(err){
+        return response.sendResponse(res, 500,"error",constants.messages.error.getData,err);
+      }
+      else{
+        return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
+      }
+    });
+
+  }
+  catch(err) {
+    return response.sendResponse(res, 500,"error",constants.messages.error.getData,err);
+  }
+
+}
 /*
 * Name : saveAttachments
 * Info : this is used to save attachment , after multer uploaded file the server
