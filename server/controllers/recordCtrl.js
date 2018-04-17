@@ -55,67 +55,6 @@ exports.getRecord = function(req,res){
   }
 }
 
-
-exports.getSearch2 = function(req, res) {
-  try {
-    var query = {};
-    var plants = [],suppliers = [],brokers = [],rawMaterial = [];
-    if(req.params.search == "false" || req.params.search == "true") {
-      if(req.params.search == "false")
-      req.params.search = false;
-
-      if(req.params.search == "true")
-      req.params.search = true;
-
-      query["$or"] = [
-         //give input as isApproved show as output that field which is related approved
-         {approved  : req.params.search},
-         // //give input as isNonGmo  show as output that field which is related nonGmo
-         {nonGmo   :req.params.search},
-      ]
-    }
-    else{
-      query["$or"] = [
-        //give input as country show as output that field which is related country
-        {country : {
-          $regex:req.params.search , $options: 'i' }
-        },
-        //give input as containerNo show as output that field which is related containerNo
-        {containerNo : {
-          $regex:req.params.search , $options: 'i' }
-        },
-
-        //give input as lotNo show as output that field which is related lotNo
-        {lotNo  : {
-          $regex:req.params.search , $options: 'i' }
-        },
-        //give input as po  show as output that field which is related po
-       {po    : {
-          $regex:req.params.search , $options: '' }
-        },
-        //give input as variety show as output that field which is related variety
-        {variety  : {
-          $regex:req.params.search , $options: 'i' }
-        }
-
-       ]
-    }
-
-    console.log("query  ",JSON.stringify(query))
-    models.recordModel.find(query,function(err, data)
-    {
-
-      if(err){
-        logger.error("getSearch ", err);
-        return response.sendResponse(res,500,"error",constants.messages.error.getData,err);
-      }
-      return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
-     })
-  } catch (err) {
-    logger.error("getSearch " + err);
-
-  }
-}
 exports.getSearch = function(req, res) {
   try{
     var query = {};
