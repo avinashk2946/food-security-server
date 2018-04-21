@@ -290,64 +290,99 @@ exports.getSearch = function(req, res) {
 * Info : this is used to save attachment , after multer uploaded file the server
 */
 exports.saveAttachments = function(req,res) {
-  var billOfLanding = [];
-  var commercialInvoice = [];
-  var packingList = [];
-  var coa = [];
-  var ccpVerification = [];
-  var environmentalMonitoring = [];
-  var otherSupporting = [];
-  console.log("req.body._id   ",req.body._id);
-  if(req.files.length) {
-    for(var i in req.files) {
-      console.log("******* ",req.files[i].fieldname.toLowerCase() ,String("billOfLanding").toLowerCase() , req.files[i].fieldname.toLowerCase().indexOf(String("billOfLanding").toLowerCase()) );
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("billOfLanding").toLowerCase())  != -1){
-        console.log("Inside bill of landing  ");
-        billOfLanding.push(req.files[i].path);
-      }
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("commercialInvoice").toLowerCase())  != -1) {
-        commercialInvoice.push(req.files[i].path);
-      }
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("packingList").toLowerCase())  != -1){
-        packingList.push(req.files[i].path);
-      }
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("coa").toLowerCase())  != -1){
-        coa.push(req.files[i].path);
-      }
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("ccpVerification").toLowerCase())  != -1){
-        ccpVerification.push(req.files[i].path);
-      }
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("environmentalMonitoring").toLowerCase())  != -1){
-        environmentalMonitoring.push(req.files[i].path);
-      }
-      if(req.files[i].fieldname.toLowerCase().indexOf(String("otherSupporting").toLowerCase())  != -1){
-        otherSupporting.push(req.files[i].path);
+  try{
+    var billOfLanding = [];
+    var commercialInvoice = [];
+    var packingList = [];
+    var coa = [];
+    var ccpVerification = [];
+    var environmentalMonitoring = [];
+    var otherSupporting = [];
+    console.log("req.body._id   ",req.body._id);
+    if(req.files.length) {
+      for(var i in req.files) {
+        console.log("******* ",req.files[i].fieldname.toLowerCase() ,String("billOfLanding").toLowerCase() , req.files[i].fieldname.toLowerCase().indexOf(String("billOfLanding").toLowerCase()) );
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("billOfLanding").toLowerCase())  != -1){
+          console.log("Inside bill of landing  ");
+          billOfLanding.push(req.files[i].path);
+        }
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("commercialInvoice").toLowerCase())  != -1) {
+          commercialInvoice.push(req.files[i].path);
+        }
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("packingList").toLowerCase())  != -1){
+          packingList.push(req.files[i].path);
+        }
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("coa").toLowerCase())  != -1){
+          coa.push(req.files[i].path);
+        }
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("ccpVerification").toLowerCase())  != -1){
+          ccpVerification.push(req.files[i].path);
+        }
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("environmentalMonitoring").toLowerCase())  != -1){
+          environmentalMonitoring.push(req.files[i].path);
+        }
+        if(req.files[i].fieldname.toLowerCase().indexOf(String("otherSupporting").toLowerCase())  != -1){
+          otherSupporting.push(req.files[i].path);
+        }
       }
     }
-  }
 
-  // update record
-  models.recordModel.update({_id:req.body._id},
-    {
-      billOfLanding:billOfLanding,
-      commercialInvoice:commercialInvoice,
-      packingList:packingList,
-      coa:coa,
-      ccpVerification:ccpVerification,
-      environmentalMonitoring:environmentalMonitoring,
-      otherSupporting:otherSupporting,
-      isSetDocument: true // update flag for the document
-    }  ,
-    { multi:true} ,
-    function(err,data) {
-      if(err){
-        return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
+    // update record
+    // models.recordModel.update({_id:req.body._id},
+    //   {
+    //     billOfLanding:billOfLanding,
+    //     commercialInvoice:commercialInvoice,
+    //     packingList:packingList,
+    //     coa:coa,
+    //     ccpVerification:ccpVerification,
+    //     environmentalMonitoring:environmentalMonitoring,
+    //     otherSupporting:otherSupporting,
+    //     isSetDocument: true // update flag for the document
+    //   }  ,
+    //   { multi:true} ,
+    //   function(err,data) {
+    //     if(err){
+    //       return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
+    //     }
+    //     else{
+    //       return response.sendResponse(res,200,"success",constants.messages.success.saveData,data);
+    //     }
+    //   }
+    // )
+    models.recordModel.findById(req.body._id).exec()
+    .then(function(record) {
+      if(!record) {
+        throw (new Error(constants.error.dataNotFound));
       }
-      else{
-        return response.sendResponse(res,200,"success",constants.messages.success.saveData,data);
-      }
-    }
-  )
+      models.recordModel.update({_id:req.body._id},
+        {
+          billOfLanding:record.billOfLanding.concat(billOfLanding),
+          commercialInvoice:record.commercialInvoice.concat(commercialInvoice),
+          packingList:record.packingList.concat(packingList),
+          coa:record.coa.concat(coa),
+          ccpVerification:record.ccpVerification.concat(ccpVerification),
+          environmentalMonitoring:record.environmentalMonitoring.concat(environmentalMonitoring),
+          otherSupporting:record.otherSupporting.concat(otherSupporting),
+          isSetDocument: true // update flag for the document
+        }  ,
+        { multi:true} ,
+        function(err,data) {
+          if(err){
+            throw err;
+          }
+          else{
+            return response.sendResponse(res,200,"success",constants.messages.success.saveData,data);
+          }
+        }
+      )
+    })
+    .catch(function(err) {
+      throw err;
+    })
+  }
+  catch(err) {
+     return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
+  }
 }
 exports.udpateRecord = function(req,res){
   try {
