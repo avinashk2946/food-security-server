@@ -608,7 +608,7 @@ exports.checkSupplierLot = function(req,res){
             }
             component.utility.uploadImage({
               base64: req.body.base64,
-              fileName: req.body.fileName
+              fileName: req.body.fileName+((new Date()).getTime()) // append current time
             },uploadPath, function(err, imagePath) {
               if (err) {
                 logger.error("udpateUser  " + err);
@@ -648,14 +648,16 @@ exports.checkSupplierLot = function(req,res){
               // update by insert sample
               component.utility.uploadImage({
                 base64: req.body.base64,
-                fileName: req.body.fileName
+                fileName: (req.body.fileName+((new Date()).getTime()))
               },uploadPath, function(err, imagePath) {
                 if (err) {
                   logger.error("udpateUser  " + err);
                   return response.sendResponse(res, 500,"error",constants.messages.error.imageUpload,err);
                 }
                 req.body.caseImg = imagePath;
-                sampleCollectionData.samples.push(req.body);
+                console.log(sampleCollectionData.samples.length +">>>>>>>");
+                sampleCollectionData.samples = sampleCollectionData.samples.concat([req.body]);
+                console.log(sampleCollectionData.samples.length +"#######");
                 sampleCollectionData.save(function(err,data) {
                   if(err) {
                     throw err;

@@ -32,10 +32,10 @@ var storage = multer.diskStorage({
     // console.log("req  ",req);
     console.log("req  body ",req.body);
     if(req.path.indexOf("sampleCollection") != -1){
-      cb(null,file.originalname); // for sample collection keep the original name
+      cb(null,file.originalname+((new Date()).getTime()) ); // for sample collection keep the original name
     }
     else{
-      cb(null, (req.query.po || new Date() )+"_"+file.originalname);
+      cb(null, (req.query.po || ((new Date()).getTime()) )+"_"+file.originalname);
     }
   }
 });

@@ -25,7 +25,7 @@ exports.addConfig = function(req, res) {
           // upload base 64 file
           component.utility.uploadImage({
             base64: req.body.backgroundImg,
-            fileName: req.body.backgroundImgName
+            fileName: req.body.backgroundImgName+((new Date()).getTime())
           } , null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
@@ -45,7 +45,7 @@ exports.addConfig = function(req, res) {
           // upload base 64 file
           component.utility.uploadImage({
             base64: req.body.logoImg,
-            fileName: req.body.logoImgName
+            fileName: req.body.logoImgName+((new Date()).getTime())
           },null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
@@ -129,7 +129,7 @@ exports.udpateConfig = function(req, res) {
           // upload base 64 file
           component.utility.uploadImage({
             base64: req.body.backgroundImg,
-            fileName: req.body.backgroundImgName
+            fileName: req.body.backgroundImgName+((new Date()).getTime())
           },null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
@@ -149,7 +149,7 @@ exports.udpateConfig = function(req, res) {
           // upload base 64 file
           component.utility.uploadImage({
             base64: req.body.logoImg,
-            fileName: req.body.logoImgName
+            fileName: req.body.logoImgName+((new Date()).getTime())
           },null, function(err, imagePath) {
             if (err) {
               logger.error("udpateUser  " + err);
