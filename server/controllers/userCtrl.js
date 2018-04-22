@@ -436,9 +436,9 @@ exports.verifyEmail = function(req, res) {
         models.userModel.findOneAndUpdate(query,update,option,function(err,user) {
           // send mail with the token
           var userObj = {
-            name:userData.firstName,
-            email: userData.email,
-            resetPasswordToken : userData.resetPasswordToken
+            name:user.firstName,
+            email: user.email,
+            resetPasswordToken : user.resetPasswordToken
           }
 
           utility.sendVerificationMail(userObj,function(err,data) {
