@@ -608,7 +608,7 @@ exports.checkSupplierLot = function(req,res){
             }
             component.utility.uploadImage({
               base64: req.body.base64,
-              fileName: req.body.fileName+((new Date()).getTime()) // append current time
+              fileName: ((new Date()).getTime())+req.body.fileName// append current time
             },uploadPath, function(err, imagePath) {
               if (err) {
                 logger.error("udpateUser  " + err);
@@ -648,16 +648,14 @@ exports.checkSupplierLot = function(req,res){
               // update by insert sample
               component.utility.uploadImage({
                 base64: req.body.base64,
-                fileName: (req.body.fileName+((new Date()).getTime()))
+                fileName: ((new Date()).getTime())+req.body.fileName
               },uploadPath, function(err, imagePath) {
                 if (err) {
                   logger.error("udpateUser  " + err);
                   return response.sendResponse(res, 500,"error",constants.messages.error.imageUpload,err);
                 }
                 req.body.caseImg = imagePath;
-                console.log(sampleCollectionData.samples.length +">>>>>>>");
                 sampleCollectionData.samples = sampleCollectionData.samples.concat([req.body]);
-                console.log(sampleCollectionData.samples.length +"#######");
                 sampleCollectionData.save(function(err,data) {
                   if(err) {
                     throw err;
@@ -703,6 +701,98 @@ exports.checkSupplierLot = function(req,res){
       }
     }
     return count; // for not found
+  }
+  exports.deleteSample = function(req,res) {
+    try {
+      if(!req.params._id){
+        return response.sendResponse(res, 402,"error",constants.messages.error.sampleCollectionIdRequired);
+      }
+      if(!req.params.sampleId){
+        return response.sendResponse(res, 402,"error",constants.messages.error.sampleIdRequired);
+      }
+      var query = {
+        _id:req.params._id
+      };
+      var update = {
+        "$pull":{"samples":{"_id":req.params.sampleId } }
+      }
+      var options = {
+        new:true
+      }
+      models.sampleCollectionModel.findOneAndUpdate(query,update,options)
+      .then(function(record) {
+        return response.sendResponse(res, 402,"error",constants.messages.success.updateData,record);
+      })
+      .catch(function(err) {
+        throw err;
+      })
+
+    } catch (e) {
+      return response.sendResponse(res, 500,"error",constants.messages.error.updateData,err);
+    }
+  }
+  /***
+  ** info : taking request body of the sample and update data
+          update image path if image is present in base 64
+          where sending base64 is optional
+  ***/
+  exports.updateSampleCollectionSample = function(req,res) {
+    try {
+      var index;
+      var uploadPath = config.get(config.get("env")+".uploadPath")+"/sampleCollection";
+      models.sampleCollectionModel.findOne({"samples._id":req.body._id}).exec()
+      .then(function(sampleCollectionData) {
+        if(!sampleCollectionData){
+          throw (new Error(constants.error.dataNotFound));
+        }
+        // looping to get the sample
+        for(var i in sampleCollectionData.samples){
+          if(sampleCollectionData.samples[i]._id == req.body._id){
+            // check for the base64 image
+            index = i;
+            break;
+          }
+        }
+        if(req.body.base64 && req.body.fileName){
+          // upload image
+          component.utility.uploadImage({
+            base64: req.body.base64,
+            fileName: ((new Date()).getTime())+req.body.fileName
+          },uploadPath, function(err, imagePath) {
+            if (err) {
+              logger.error("udpateUser  " + err);
+              return response.sendResponse(res, 500,"error",constants.messages.error.imageUpload,err);
+            }
+            req.body.caseImg = imagePath;
+            sampleCollectionData.samples[i] = req.body;
+            sampleCollectionData.save(function(err,data) {
+              if(err) {
+                throw err;
+              }
+              return response.sendResponse(res, 200,"success",constants.messages.success.updateData);
+            })
+          })
+        }
+        else{
+          // direct upload request data
+          sampleCollectionData.samples[i] = req.body;
+          sampleCollectionData.save(function(err,data) {
+            if(err) {
+              throw err;
+            }
+            return response.sendResponse(res, 200,"success",constants.messages.success.updateData);
+          })
+        }
+
+      })
+      .catch(function(err) {
+        throw err;
+      })
+
+    } catch (err) {
+      return response.sendResponse(res, 500,"error",constants.messages.error.updateData,err);
+    }
+
   }
   exports.saveSampleCollection = function(req,res){
     try {

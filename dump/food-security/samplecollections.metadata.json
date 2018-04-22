@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"food-security.samplecollections"}]}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"food-security.samplecollections"}],"uuid":"171664d997ab4b74b576e57ec42d3bbe"}

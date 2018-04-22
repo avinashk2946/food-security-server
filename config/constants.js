@@ -56,6 +56,8 @@ var constants = {
       "sampleCollectionIdRequired" : "Sample Collection Id required",
       "imageUpload"     : "Error in upload Image",
       "sampleLimit"     : "Sample Limit crossed",
+      "sampleCollectionIdRequired"     : "Sample Collection Id Required",
+      "sampleIdRequired"     : "Sample  Id Required",
 
       },
     success:{

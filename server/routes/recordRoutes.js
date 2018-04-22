@@ -32,7 +32,7 @@ var storage = multer.diskStorage({
     // console.log("req  ",req);
     console.log("req  body ",req.body);
     if(req.path.indexOf("sampleCollection") != -1){
-      cb(null,file.originalname+((new Date()).getTime()) ); // for sample collection keep the original name
+      cb(null,((new Date()).getTime())+file.originalname ); // for sample collection keep the original name
     }
     else{
       cb(null, (req.query.po || ((new Date()).getTime()) )+"_"+file.originalname);
@@ -83,10 +83,16 @@ router.post('/sampleCollection', function(req, res, next) {
   controllers.recordCtrl.saveSampleCollection(req, res);
 });
 router.post('/sampleCollection/upload',upload.any(), function(req, res, next) {
-  controllers.recordCtrl.uploadSampleCollection(req, res);
+  controllers.recordCtrl.uploadSampleCollection(req, res); // deprecated
 });
 router.get('/sampleCollection/:record',function(req, res, next) {
   controllers.recordCtrl.getSampleCollection(req, res);
+});
+router.delete('/sampleCollection/deleteSample/:_id/:sampleId',function(req, res, next) {
+  controllers.recordCtrl.deleteSample(req, res);
+});
+router.put('/sampleCollection/updateSample',function(req, res, next) {
+  controllers.recordCtrl.updateSampleCollectionSample(req, res);
 });
 
 router.delete('/:id', function(req, res, next) {
