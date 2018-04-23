@@ -59,6 +59,9 @@ var constants = {
       "sampleCollectionIdRequired"     : "Sample Collection Id Required",
       "sampleIdRequired"     : "Sample  Id Required",
 
+      //Dynamic Form
+      "templateExists" : "Template already exists for selected Form Type"
+
       },
     success:{
 

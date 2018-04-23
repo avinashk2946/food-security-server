@@ -8,3 +8,4 @@ exports.brokerCtrl = require("./brokerCtrl");
 exports.constantsCtrl= require("./constantsCtrl");
 exports.rawMaterialCtrl = require("./rawMaterialCtrl");
 exports.recordCtrl = require("./recordCtrl");
+exports.dynamicFormCtrl = require("./dynamicFormCtrl");
