@@ -1079,12 +1079,9 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
+				"body": {},
 				"url": {
-					"raw": "http://localhost:3000/record/search/USA",
+					"raw": "http://localhost:3000/record/search/containerNo1,testPo",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1093,7 +1090,7 @@
 					"path": [
 						"record",
 						"search",
-						"USA"
+						"containerNo1,testPo"
 					]
 				}
 			},
