@@ -56,6 +56,45 @@ exports.getRecord = function(req,res){
 }
 
 exports.getSearch = function(req, res) {
+  var searches = req.params.search.split(",");
+  var count = 0;
+  var resultArr = [];
+  var intersectionArr = [];
+  var err;
+  recurssiveSearch(searches,count,resultArr,err,function(err,resultArr) {
+    if(err){
+      return response.sendResponse(res, 500,"error",constants.messages.error.saveData,err);
+    }
+    else{
+      //return response.sendResponse(res,200,"success",constants.messages.success.saveData,resultArr);
+      if(resultArr.length == 1){
+        return response.sendResponse(res,200,"success",constants.messages.success.saveData,resultArr[0]);
+      }
+      // make intersection of result arr
+      for(var i = 0 ; i < resultArr.length - 1 ; i++) {
+        var array1 = resultArr[i];
+        var array2 = resultArr[i+1];
+        var result = array1.filter(function(n1) {
+          return !(array2.some(function(n2){
+            return n1._id.toString() == n2._id.toString();
+          }))
+        });
+        intersectionArr = intersectionArr.concat(result);
+      }
+      return response.sendResponse(res,200,"success",constants.messages.success.saveData,intersectionArr);
+    }
+  });
+
+
+}
+var recurssiveSearch = function(searches,count,resultArr,err,callback) {
+  console.log("resultArr start - length   -  "+resultArr.length);
+  if(!searches[count])
+  {
+    return callback(err,resultArr);// close recurrsion
+
+  }
+  var search = searches[count];
   try{
     var query = {};
     waterfall([
@@ -64,27 +103,27 @@ exports.getSearch = function(req, res) {
         query["$or"] = [
           //give input as country show as output that field which is related country
           {plantId : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {name : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           //give input as containerNo show as output that field which is related containerNo
-          {country : {
-            $regex:req.params.search , $options: 'i' }
-          },
+          // {country : {
+          //   $regex:search , $options: 'i' }
+          // },
 
           //give input as lotNo show as output that field which is related lotNo
           {state  : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           //give input as po  show as output that field which is related po
           {city    : {
-            $regex:req.params.search , $options: '' }
+            $regex:search , $options: '' }
           },
           //give input as variety show as output that field which is related variety
           {pin  : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           }
 
         ]
@@ -101,43 +140,43 @@ exports.getSearch = function(req, res) {
         // get related supplier ids
         query["$or"] = [
           {name : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {id : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {phone : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.city" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.region" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.state" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.pin" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.country" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"contactFirstName" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"contactLastName" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"contactPosition" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"contactEmail" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"contact24Hour" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
 
 
@@ -155,23 +194,23 @@ exports.getSearch = function(req, res) {
         // get related broker ids
         query["$or"] = [
           {name : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.city" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.region" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.state" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {"address.pin" : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
-          {"address.country" : {
-            $regex:req.params.search , $options: 'i' }
-          }
+          // {"address.country" : {
+          //   $regex:search , $options: 'i' }
+          // }
         ]
         models.brokerModel.find(query).distinct("_id").exec()
         .then(function(brokers) {
@@ -186,23 +225,23 @@ exports.getSearch = function(req, res) {
         // get related  rawMaterial ids
         query["$or"] = [
           {rmGroupName : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {name : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {rmCode : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {format : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
           {variety : {
-            $regex:req.params.search , $options: 'i' }
+            $regex:search , $options: 'i' }
           },
-          {country : {
-            $regex:req.params.search , $options: 'i' }
-          }
+          // {country : {
+          //   $regex:search , $options: 'i' }
+          // }
 
         ]
         models.rawMaterialModel.find(query).distinct("_id").exec()
@@ -215,10 +254,10 @@ exports.getSearch = function(req, res) {
         })
       },
       function(plants,suppliers,brokers,rawMaterials, callback){
-        console.log("plants ",plants);
-        console.log("suppliers ",suppliers);
-        console.log("brokers ",brokers);
-        console.log("rawMaterials ",rawMaterials);
+        // console.log("plants ",plants);
+        // console.log("suppliers ",suppliers);
+        // console.log("brokers ",brokers);
+        // console.log("rawMaterials ",rawMaterials);
         //getting records
         var query = {};
         query["$or"] = [
@@ -235,25 +274,25 @@ exports.getSearch = function(req, res) {
           rawMaterial:{"$in":rawMaterials}
         },
         //give input as country show as output that field which is related country
-        {country : {
-          $regex:req.params.search , $options: 'i' }
-        },
+        // {country : {
+        //   $in:search.split(",")  }
+        // },
         //give input as containerNo show as output that field which is related containerNo
         {containerNo : {
-          $regex:req.params.search , $options: 'i' }
+          $regex:search , $options: 'i' }
         },
 
         //give input as lotNo show as output that field which is related lotNo
         {lotNo  : {
-          $regex:req.params.search , $options: 'i' }
+          $regex:search , $options: 'i' }
         },
         //give input as po  show as output that field which is related po
        {po    : {
-          $regex:req.params.search , $options: '' }
+          $regex:search , $options: '' }
         },
         //give input as variety show as output that field which is related variety
         {variety  : {
-          $regex:req.params.search , $options: 'i' }
+          $regex:search , $options: 'i' }
         }
 
        ]
@@ -272,10 +311,15 @@ exports.getSearch = function(req, res) {
       }
     ], function (err, data) {
       if(err){
-        return response.sendResponse(res, 500,"error",constants.messages.error.getData,err);
+        // return response.sendResponse(res, 500,"error",constants.messages.error.getData,err);
+        recurssiveSearch(searches,-1,null,err,callback); // will break recurrsion with err value
       }
       else{
-        return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
+        // return response.sendResponse(res,200,"success",constants.messages.success.getData,data);
+        resultArr.push(data);
+        console.log("total record >>>>> searched   -  "+data.length);
+        console.log("resultArr End - length   -  "+resultArr.length);
+        recurssiveSearch(searches,++count,resultArr,null,callback);
       }
     });
 
