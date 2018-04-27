@@ -512,6 +512,8 @@ exports.deleteRecord = function(req, res) {
      logger.error("updateRecord ", e);
    }
  }
+ 
+ 
  exports.saveSamplePreparaion = function(req,res){
    try {
      if(!req.body.record){
@@ -548,6 +550,7 @@ exports.deleteRecord = function(req, res) {
      return response.sendResponse(res,500,"error",constants.messages.error.saveRecord,err);
    }
  }
+
 exports.getSamplePreparaion = function(req,res){
   if(!req.params.record){
     return response.sendResponse(res, 401,"error",constants.messages.error.recordIdRequired);
@@ -598,9 +601,37 @@ exports.checkSupplierLot = function(req,res){
     return response.sendResponse(res,500,"error",constants.messages.error.saveData,err);
   })
 
-
 }
 
+  exports.deleteSamplePreparation = function(req,res) {
+    try {
+      if(!req.params._id){
+        return response.sendResponse(res, 402,"error",constants.messages.error.sampleCollectionIdRequired);
+      }
+      if(!req.params.sampleId){
+        return response.sendResponse(res, 402,"error",constants.messages.error.sampleIdRequired);
+      }
+      var query = {
+        _id:req.params._id
+      };
+      var update = {
+        "$pull":{"samples":{"_id":req.params.sampleId } }
+      }
+      var options = {
+        new:true
+      }
+      models.sampleCollectionModel.findOneAndUpdate(query,update,options)
+      .then(function(record) {
+        return response.sendResponse(res, 402,"error",constants.messages.success.updateData,record);
+      })
+      .catch(function(err) {
+        throw err;
+      })
+
+    } catch (e) {
+      return response.sendResponse(res, 500,"error",constants.messages.error.updateData,err);
+    }
+  }
 
 
  /**
@@ -746,6 +777,7 @@ exports.checkSupplierLot = function(req,res){
     }
     return count; // for not found
   }
+
   exports.deleteSample = function(req,res) {
     try {
       if(!req.params._id){
