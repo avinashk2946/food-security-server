@@ -76,6 +76,13 @@ router.get('/samplePreparation/:record', function(req, res, next) {
 router.get('/samplePreparation/checkSupplierLot/:supplier/:lotNo/:rmGroupName', function(req, res, next) {
   controllers.recordCtrl.checkSupplierLot(req, res);
 });
+
+router.delete('/samplePreparation/:_id/:sampleId',function(req, res, next) {
+  controllers.recordCtrl.deleteSamplePreparationSample(req, res);
+});
+
+
+// sample collection
 router.post('/sampleCollection2', function(req, res, next) {
   controllers.recordCtrl.saveSampleCollection2(req, res);
 });
