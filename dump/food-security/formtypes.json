@@ -1,0 +1,51 @@
+{
+	"_id" : ObjectId("5adae39c451530096024e2a6"),
+	"name" : "QMR-14",
+	"status" : true
+},
+{
+	"_id" : ObjectId("5adae39c451530096024e2a7"),
+	"name" : "QMR-13",
+	"status" : true
+},
+{
+	"_id" : ObjectId("5adae435451530096024e2ab"),
+	"name" : "Demo",
+	"status" : true
+},
+{
+	"_id" : ObjectId("5ade0b1bba67a70f3c4f80ff"),
+	"indexes" : [
+		{
+			"v" : 1.0,
+			"key" : {
+				"_id" : 1.0
+			},
+			"name" : "_id_",
+			"ns" : "food-security.users"
+		},
+		{
+			"v" : 1.0,
+			"unique" : true,
+			"key" : {
+				"username" : 1.0
+			},
+			"name" : "username_1",
+			"background" : true,
+			"ns" : "food-security.users"
+		},
+		{
+			"v" : 1.0,
+			"unique" : true,
+			"key" : {
+				"email" : 1.0
+			},
+			"name" : "email_1",
+			"ns" : "food-security.users",
+			"background" : true
+		}
+	],
+	"options" : {
+		
+	}
+},
