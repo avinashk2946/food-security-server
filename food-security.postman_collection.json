@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"role\"                : \"5a9999a4f0e9d90c34483407\",\n   \n    \"plantId\"             :\"5a999be1f0e9d90c34483409\",\n    \"username\"            :\"operator1\",\n    \"password\"            : \"operator1\",\n    \"email\"               : \"oerator1@yopmail.com\",\n    \"salutation\"          : \"Mr\",\n    \"firstName\"          : \"operator1\",\n    \"lastName\"          : \"operator1\",\n    \"empId\"              : \"operator1\",\n    \"phone\"             :  \"898989898\",\n\t\n    \"country\"          :  \"India\",\n    \"state\"          :  \"Odisha\",\n    \"city\"          : \"Bbsr\",\n    \"pin\"          :  \"7521002\"\n}"
+					"raw": "{\n\t\"role\"                : \"5a8178ce4f8120233819a3eb\",\n   \n    \"plant\"             :\"5aa580ef326ba4040cdac584\",\n    \"username\"            :\"operator1\",\n    \"password\"            : \"operator1\",\n    \"email\"               : \"oerator1@yopmail.com\",\n    \"salutation\"          : \"Mr\",\n    \"firstName\"          : \"operator2\",\n    \"lastName\"          : \"operator2\",\n    \"empId\"              : \"operator2\",\n    \"phone\"             :  \"898989898\",\n\t\n    \"country\"          :  \"India\",\n    \"state\"          :  \"Odisha\",\n    \"city\"          : \"Bbsr\",\n    \"pin\"          :  \"7521002\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/user",
@@ -1726,6 +1726,30 @@
 					]
 				},
 				"description": "only send sample data in the req body\n\nEx:\n{\n                    \"supplierLot\": \"supplierLot2\",\n                    \"comment\": \"na\",\n                    \"_id\": \"5adc52540ba01d20803ab637\",\n                    \"pesticideTest\": true,\n                    \"testGrp\": true,\n                    \"qualityAnalysis\": true,\n                    \"caseImg\": \"./upload/sampleCollection/1524388436420_background.PNG1524388436420\",\n                    \"base64\" : \"base64Data\", // optional\n\t\t\t\t\t\"fileName\" : \"back.PNG\"// optional\n                }"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/record/samplePreparation/5adc45877199d18dd9b30020/5adc458660ec2b6e281bb1ae",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:3000/record/samplePreparation/5adc45877199d18dd9b30020/5adc458660ec2b6e281bb1ae",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"record",
+						"samplePreparation",
+						"5adc45877199d18dd9b30020",
+						"5adc458660ec2b6e281bb1ae"
+					]
+				},
+				"description": "http://localhost:3000/record/samplePreparation/:_id/:sampleId\ninfo - used to delete samples in sample preparation\nwhere _id - sample preparation id\n\t  sampleId - id of sample to be deleted\n\t  "
 			},
 			"response": []
 		}
