@@ -13,6 +13,7 @@ var constants = {
       "updateData"  : "Error in update data",
       "deleteData"  : "Error in delete data",
       "dataNotFound" : "Data not found",
+      "dataExists" : "Record Already Exists !",
       //Role
       "roleExist" : "Role Already Exists !",
       "saveRole" : "Error in saving Role",
