@@ -10,8 +10,12 @@ router.get('/', (req, res, next)=> {
   controllers.dynamicFormCtrl.getDynamicForm(req, res);
 });
 
-router.put('/', function (req, res, next) {
+router.put('/:id', function (req, res, next) {
   controllers.dynamicFormCtrl.updateDynamicForm(req, res);
+});
+
+router.post('/search', (req, res, next)=> {
+  controllers.dynamicFormCtrl.getDynamicForm(req, res);
 });
 
 
