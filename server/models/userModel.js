@@ -5,6 +5,7 @@ var validator = require('validator');
 var Schema = mongoose.Schema;
 var password = require('password-hash-and-salt');
 var userSchema = new mongoose.Schema({
+  client                : {type: Schema.Types.ObjectId, ref: 'client',default:null},
     role                : {type: Schema.Types.ObjectId, ref: 'role',required: true},
     client              : {type: String, default:null},
     plant               : {type: Schema.Types.ObjectId, ref: 'plant',required: constants.messages.error.undefinedPlantId},

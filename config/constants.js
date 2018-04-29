@@ -18,6 +18,9 @@ var constants = {
       "roleExist" : "Role Already Exists !",
       "saveRole" : "Error in saving Role",
 
+      // client
+      "clientExist" : "Client Already Exists !",
+
 
 
       //user

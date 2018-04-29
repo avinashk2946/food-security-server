@@ -3,6 +3,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 var constants = require("./../../config/constants")
 var roleSchema = new mongoose.Schema({
+  client                : {type: Schema.Types.ObjectId, ref: 'client',default:null},
     type              : {type: String,unique:true,trim:true},
     menu              : [Schema.Types.Mixed],
     api               : [Schema.Types.Mixed],
