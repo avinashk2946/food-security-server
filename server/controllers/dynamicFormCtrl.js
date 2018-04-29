@@ -11,13 +11,27 @@ const express = require('express'),
 
 exports.addDynamicForm = function (req, res) {
   try {
-    new models.dynamicFormModel(req.body).save(function (err) {
+    //to verify whether template alraedy exists for given company, plant & form type, if yes user need to make update API call
+    const params = { "plantId": req.body.plantId, "companyId": req.body.companyId, "formTypeId": req.body.formTypeId };
+    models.dynamicFormModel.find(params, function (err, data) {
       if (err) {
         logger.error("addDynamicForm ", err);
         return response.sendResponse(res, 500, "error", constants.messages.error.saveData, err);
       }
+      if (data.length == 0) {
+        //for a company, plant & form type combination, only one record can be present
+        new models.dynamicFormModel(req.body).save(function (err) {
+          if (err) {
+            logger.error("addDynamicForm ", err);
+            return response.sendResponse(res, 500, "error", constants.messages.error.saveData, err);
+          }
+          else {
+            return response.sendResponse(res, 200, "success", constants.messages.success.saveData);
+          }
+        });
+      }
       else {
-        return response.sendResponse(res, 200, "success", constants.messages.success.saveData);
+        return response.sendResponse(res, 200, "error", constants.messages.error.templateExists, data);
       }
     });
   } catch (e) {
@@ -51,12 +65,12 @@ exports.getDynamicForm = function (req, res) {
 exports.updateDynamicForm = function (req, res) {
   try {
     const query = { "_id": req.params.id },
-    updateData =  req.body,
-    option = {
-      new:true,
-      multi:true
-    };
-    models.dynamicFormModel.update(query,updateData,option,function(err,user) {
+      updateData = req.body,
+      option = {
+        new: true,
+        multi: true
+      };
+    models.dynamicFormModel.update(query, updateData, option, function (err, user) {
       if (err) {
         logger.error("updateDynamicForm ", err);
         return response.sendResponse(res, 500, "error", constants.messages.error.updateData, err);
