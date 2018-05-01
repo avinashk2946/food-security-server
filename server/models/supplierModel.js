@@ -5,7 +5,7 @@ var constants = require("./../../config/constants")
 var supplierSchema = new mongoose.Schema({
   plants           : [{type: Schema.Types.ObjectId, ref: 'plant'}],
   name              :{type: String,required:true},
-  id                :  {type: String,required:true},
+  id                :  {type: String,required:true,unique:true},
   phone             :{type: String},
   address : [
     {
@@ -49,6 +49,6 @@ var supplierSchema = new mongoose.Schema({
   createdDate       : {type: Date, default: new Date()},
   isDelete          : {type: Boolean, default:false},
 });
-// supplierSchema.plugin(uniqueValidator, {message: constants.messages.error.roleExist});
+supplierSchema.plugin(uniqueValidator, {message: constants.messages.error.supplierExist});
 var supplierModel = mongoose.model('supplier', supplierSchema);
 module.exports = supplierModel;

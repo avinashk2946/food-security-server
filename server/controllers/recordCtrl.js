@@ -571,7 +571,7 @@ exports.deleteRecord = function(req, res) {
       }
       models.sampleCollectionModel.findOneAndUpdate(query,update,options)
       .then(function(record) {
-        return response.sendResponse(res, 402,"error",constants.messages.success.updateData,record);
+        return response.sendResponse(res, 200,"success",constants.messages.success.updateData,record);
       })
       .catch(function(err) {
         throw err;
