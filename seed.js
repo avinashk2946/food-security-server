@@ -15,7 +15,7 @@ var sheetCounter = 0 ; // used to read sheet no.
 var recordCounter = 0;
 var config = {
   password : "food-safe",
-  filePath : "test.xlsx"
+  filePath : "C:/Users/GFSC 4/Desktop/temp/test.xlsx"
 }
 function resetCollections() {
   models.clientModel.remove()
@@ -638,6 +638,10 @@ function seedRawMaterial(headers,recordArr,data,recordCounter,callback) {
         else if(j == 3) {
           // console.log('passwordHash ',passwordHash);
           recordObj[headers[j]] = brokerId;
+        }
+        else if(j == 8) {
+          // console.log('passwordHash ',passwordHash);
+          recordObj[headers[j]] = (data[recordCounter][j]).split(",");
         }
         else if(data[recordCounter][j] != ""){
           recordObj[headers[j]] = data[recordCounter][j];
