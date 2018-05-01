@@ -1,4 +1,4 @@
-/**
+4/**
  * Composite key for raw materials to be created from mongo console
  * with supplier id and country
  */
@@ -8,6 +8,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 var constants = require("./../../config/constants")
 var rawMatrialSchema = new mongoose.Schema({
+    client                : {type: Schema.Types.ObjectId, ref: 'client',default:null},
     plant                   :{type: Schema.Types.ObjectId, ref: 'plant'},
     supplier                :{type: Schema.Types.ObjectId, ref: 'supplier',required:true},
     broker                  :{type: Schema.Types.ObjectId, ref: 'broker'},

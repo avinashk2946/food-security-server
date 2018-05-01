@@ -17,8 +17,38 @@ var config = {
   password : "food-safe",
   filePath : "test.xlsx"
 }
+function resetCollections() {
+  models.clientModel.remove()
+  .then(function(clientData) {
+    return models.roleModel.remove();
+  })
+  .then(function(roleData) {
+    return models.userModel.remove();
+  })
+  .then(function(userData) {
+    return models.plantModel.remove();
+  })
+  .then(function(plantData) {
+    return models.supplierModel.remove();
+  })
+  .then(function(supplierData) {
+    return models.brokerModel.remove();
+  })
+  .then(function(brokerData) {
+    return models.rawMaterialModel.remove();
+  })
+  .then(function(rawMaterialData) {
+    init(++sheetCounter);
+
+  })
+  .catch(function(err) {
+    LOG.error(err);
+    console.log(err);
+  })
+}
+resetCollections(); // start with reseting all the collection
 function init(sheetCounter){
-  if(sheetCounter > 5) {
+  if(sheetCounter > 7) {
     console.log("\n\n\n Seeding completed !!!!\n\n\n\n");
     return; // break recurssion
   }
@@ -79,7 +109,7 @@ function init(sheetCounter){
             return ; // break recurssion
           }
           else{
-            console.log("recordArr ");
+            // console.log("recordArr ");
             // console.log(recordArr);
             models.plantModel.insertMany(recordArr)
             .then(function(roles) {
@@ -104,8 +134,8 @@ function init(sheetCounter){
             return ; // break recurssion
           }
           else{
-            console.log("recordArr ");
-            console.log(recordArr);
+            // console.log("recordArr ");
+            // console.log(recordArr);
             models.userModel.insertMany(recordArr)
             .then(function(roles) {
               console.log("************  User Seed completed *******************");
@@ -134,11 +164,55 @@ function init(sheetCounter){
           }
         });
           break;
-        case 5:
-
-          break;
         case 6:
+        processBroker(data,function(err,recordArr) {
+          if(err)
+          {
+            LOG.error("Error in processBroker"+err);
+            console.log(err);
+            return ; // break recurssion
+          }
+          else{
+            // console.log("recordArr ");
+            // console.log(recordArr);
+            models.brokerModel.insertMany(recordArr)
+            .then(function(brokers) {
+              console.log("************  Broker Seed completed *******************");
+              init(++sheetCounter);
+            })
+            .catch(function(err) {
+              LOG.error("Error in processBroker"+err);
+              console.log(err);
+              return ; // break recurssion
+            })
 
+          }
+        });
+          break;
+        case 7:
+        processRawMaterial(data,function(err,recordArr) {
+          if(err)
+          {
+            LOG.error("Error in processRawMaterial"+err);
+            console.log(err);
+            return ; // break recurssion
+          }
+          else{
+            // console.log("recordArr ");
+            // console.log(recordArr);
+            models.rawMaterialModel.insertMany(recordArr)
+            .then(function(roles) {
+              console.log("************  RawMaterial Seed completed *******************");
+              init(++sheetCounter);
+            })
+            .catch(function(err) {
+              LOG.error("Error in processRawMaterial"+err);
+              console.log(err);
+              return ; // break recurssion
+            })
+
+          }
+        });
           break;
         case 7:
 
@@ -152,7 +226,7 @@ function init(sheetCounter){
     }
   })
 }
-init(++sheetCounter);
+
 
 function processClient(data,callback) {
   var headers = data[0]; // array of String represents headers in excel
@@ -304,26 +378,26 @@ function seedUser(headers,recordArr,data,recordCounter,callback) {
 
       for(var j = 0 ; j < data[recordCounter].length ; j ++){
         if(j == 0) {
-          console.log('clientId',clientId);
+          // console.log('clientId',clientId);
           recordObj[headers[j]] = clientId;
         }
         else if(j == 1) {
-          console.log('roleId',roleId);
+          // console.log('roleId',roleId);
           recordObj[headers[j]] = roleId;
         }
         else if(j == 2) {
-          console.log('plantId',plantId);
+          // console.log('plantId',plantId);
           recordObj[headers[j]] = plantId;
         }
         else if(j == 8) {
-          console.log('passwordHash ',passwordHash);
+          // console.log('passwordHash ',passwordHash);
           recordObj[headers[j]] = passwordHash;
         }
         else{
           recordObj[headers[j]] = data[recordCounter][j] || null;
         }
       }
-      console.log("recordObj  ",recordObj);
+      // console.log("recordObj  ",recordObj);
       recordArr.push(recordObj);
       seedUser(headers,recordArr,data,++recordCounter,callback);
     })
@@ -354,7 +428,7 @@ function seedSupplier(headers,recordArr,data,recordCounter,callback) {
     return callback(null,recordArr);
   }
   else{
-    var clientId = null, plantId = null,passwordHash = null;
+    var clientId = null, plantId = null;
     models.clientModel.findOne({name:(data[recordCounter][0]).trim()})
     .exec()
     .then(function(client) {
@@ -373,25 +447,25 @@ function seedSupplier(headers,recordArr,data,recordCounter,callback) {
         supplier.plants = arrayUnique(supplier.plants); // make unique plant id
         var address = {};
         for(var j = 0 ; j < data[recordCounter].length ; j ++){
-          if(j == 0) {
-            console.log('clientId',clientId);
-            recordObj[headers[j]] = clientId;
-          }
-          else if(j == 1) {
-            console.log('plantId',plantId);
-            supplier.plants.push(plantId)
-            recordObj[headers[j]] = arrayUnique(supplier.plants); // make unique plant id
-          }
-          else if(j == 2) {
-            console.log('plantId',plantId);
-            recordObj[headers[j]] = plantId;
-          }
-          else if(j == 5 || j == 6 || j == 7 || j == 8) {
+          // if(j == 0) {
+          //   console.log('clientId',clientId);
+          //   recordObj[headers[j]] = clientId;
+          // }
+          // else if(j == 1) {
+          //   console.log('plantId',plantId);
+          //   supplier.plants.push(plantId)
+          //   recordObj[headers[j]] = arrayUnique(supplier.plants); // make unique plant id
+          // }
+          // else if(j == 2) {
+          //   console.log('plantId',plantId);
+          //   recordObj[headers[j]] = plantId;
+          // }
+           if(j == 5 || j == 6 || j == 7 || j == 8) {
             address[headers[j]] = data[recordCounter][j]
           }
-          else{
-            recordObj[headers[j]] = data[recordCounter][j] || null;
-          }
+          // else{
+          //   recordObj[headers[j]] = data[recordCounter][j] || null;
+          // }
         }
         supplier.address.push(address);
         supplier.address = arrayUnique(supplier.address); // make unique plant id
@@ -409,11 +483,11 @@ function seedSupplier(headers,recordArr,data,recordCounter,callback) {
         address = {};
         for(var j = 0 ; j < data[recordCounter].length ; j ++){
           if(j == 0) {
-            console.log('clientId',clientId);
+            // console.log('clientId',clientId);
             recordObj[headers[j]] = clientId;
           }
           else if(j == 1) {
-            console.log('plantId',plantId);
+            // console.log('plantId',plantId);
             recordObj[headers[j]] = [plantId]; // putting plant id in array
           }
           else if(j == 5 || j == 6 || j == 7 || j == 8) {
@@ -424,7 +498,7 @@ function seedSupplier(headers,recordArr,data,recordCounter,callback) {
           }
         }
         recordObj.address = [address];
-        console.log("recordObj  ",recordObj);
+        // console.log("recordObj  ",recordObj);
         // recordArr.push(recordObj);
         // seedSupplier(headers,recordArr,data,++recordCounter,callback);
         new models.supplierModel(recordObj).save(function (err) {
@@ -435,10 +509,6 @@ function seedSupplier(headers,recordArr,data,recordCounter,callback) {
           }
         })
       }
-
-      // console.log("recordObj  ",recordObj);
-      // recordArr.push(recordObj);
-      // seedSupplier(headers,recordArr,data,++recordCounter,callback);
     })
     .catch(function(err) {
       return callback(err,null);
@@ -446,3 +516,140 @@ function seedSupplier(headers,recordArr,data,recordCounter,callback) {
   }
 }
 /******** supplier ends ********/
+
+
+
+
+
+
+
+
+/******** broker  starts ********/
+/*
+* Here in the excel to make many-many relationship with supplier we put them in comma separated .
+*/
+function processBroker(data,callback) {
+  var headers = data[0]; // array of String represents headers in excel
+  var recordArr = [];
+  recordCounter = 1; // to start with index 1
+  seedBroker(headers,recordArr,data,recordCounter,callback)
+}
+function seedBroker(headers,recordArr,data,recordCounter,callback) {
+  if(recordCounter > data.length-1) {
+    return callback(null,recordArr);
+  }
+  else{
+    var clientId = null, suppliersId = null;
+    models.clientModel.findOne({name:(data[recordCounter][0]).trim()})
+    .exec()
+    .then(function(client) {
+      clientId = client._id;
+      return models.supplierModel.findOne({id: {"$in":(data[recordCounter][1]).split(",") }  }).distinct("_id");
+    })
+    .then(function(suppliers) {
+      suppliersId = suppliers;
+      // console.log("suppliersId ",suppliersId);
+      // seedBroker(headers,recordArr,data,++recordCounter,callback);
+      // insert new record
+      var recordObj = {};
+      var address = {};
+      for(var j = 0 ;  j < data[recordCounter].length ; j ++){
+        if(j == 0) {
+          // console.log('clientId',clientId);
+          recordObj[headers[j]] = clientId;
+        }
+        else if(j == 1) {
+          // console.log('suppliersId',suppliersId);
+          recordObj[headers[j]] = suppliersId;
+        }
+        else if(j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
+          address[headers[j]] = data[recordCounter][j];
+        }
+        else{
+          recordObj[headers[j]] = data[recordCounter][j] || null;
+        }
+      }
+      recordObj.address = [address];
+      // console.log("recordObj  ",recordObj,recordCounter);
+      recordArr.push(recordObj);
+      seedBroker(headers,recordArr,data,++recordCounter,callback);
+    })
+    .catch(function(err) {
+      return callback(err,null);
+    })
+  }
+}
+/******** broker ends ********/
+
+
+
+
+
+
+
+
+
+
+
+/******** raw material starts ********/
+function processRawMaterial(data,callback) {
+  var headers = data[0]; // array of String represents headers in excel
+  var recordArr = [];
+  recordCounter = 1; // to start with index 1
+  seedRawMaterial(headers,recordArr,data,recordCounter,callback) ;
+}
+function seedRawMaterial(headers,recordArr,data,recordCounter,callback) {
+  if(recordCounter > data.length-1) {
+    return callback(null,recordArr);
+  }
+  else{
+    var clientId = null, plantId = null, supplierId = null , brokerId = null;
+    models.clientModel.findOne({name:(data[recordCounter][0]).trim()})
+    .exec()
+    .then(function(client) {
+      clientId = client._id;
+
+      return models.plantModel.findOne({plantId:(data[recordCounter][1]).trim()})
+    })
+    .then(function(plant) {
+      plantId = plant._id;
+      return models.supplierModel.findOne({id:(data[recordCounter][2]).trim()})
+    })
+    .then(function(supplier) {
+      supplierId = supplier._id;
+      return models.brokerModel.findOne({name:(data[recordCounter][3]).trim()})
+    })
+    .then(function(broker) {
+      brokerId = broker && broker._id ? broker._id : null;
+      recordObj = {};
+      for(var j = 0 ; j < data[recordCounter].length ; j ++){
+        if(j == 0) {
+          // console.log('clientId',clientId);
+          recordObj[headers[j]] = clientId;
+        }
+        else if(j == 1) {
+          // console.log('roleId',roleId);
+          recordObj[headers[j]] = plantId;
+        }
+        else if(j == 2) {
+          // console.log('plantId',plantId);
+          recordObj[headers[j]] = supplierId;
+        }
+        else if(j == 3) {
+          // console.log('passwordHash ',passwordHash);
+          recordObj[headers[j]] = brokerId;
+        }
+        else if(data[recordCounter][j] != ""){
+          recordObj[headers[j]] = data[recordCounter][j];
+        }
+      }
+      // console.log("recordObj  ",recordObj);
+      recordArr.push(recordObj);
+      seedRawMaterial(headers,recordArr,data,++recordCounter,callback);
+    })
+    .catch(function(err) {
+      return callback(err,null);
+    })
+  }
+}
+/******** raw meterial  ends ********/

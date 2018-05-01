@@ -3,7 +3,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 var constants = require("./../../config/constants")
 var brokerSchema = new mongoose.Schema({
- // plants                           : [{type: Schema.Types.ObjectId, ref: 'plant'}],
+ client                : {type: Schema.Types.ObjectId, ref: 'client',default:null},
   suppliers                       : [{type: Schema.Types.ObjectId, ref: 'supplier'}],
   name                             : {type:String,required:true},
   address : [

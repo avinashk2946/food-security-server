@@ -3,6 +3,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 var constants = require("./../../config/constants")
 var supplierSchema = new mongoose.Schema({
+  client                : {type: Schema.Types.ObjectId, ref: 'client',default:null},
   plants           : [{type: Schema.Types.ObjectId, ref: 'plant'}],
   name              :{type: String,required:true},
   id                :  {type: String,required:true,unique:true},
