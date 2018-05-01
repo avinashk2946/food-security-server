@@ -14,6 +14,7 @@ var rawMaterialRoutes = require('./rawMaterialRoutes');
 var recordRoutes = require('./recordRoutes');
 var dynamicFormRoutes = require('./dynamicFormRoutes');
 var genericMasterRoutes = require('./genericMasterRoutes');
+const qmr14Routes = require('./qmr14Routes');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -39,6 +40,7 @@ router.use('/rawMaterial', rawMaterialRoutes);
 router.use('/record', recordRoutes);
 router.use('/dynamicForm', dynamicFormRoutes);
 router.use('/genericMaster', genericMasterRoutes);
+router.use('/qmr14', qmr14Routes);
 // router.use('/vle', vleRoutes);
 router.get('/test/:val1/:val2', function(req,res) {
   console.log("req.query   ",req.query);

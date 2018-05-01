@@ -14,3 +14,4 @@ exports.dynamicFormModel = require("./dynamicFormModel");
 exports.samplePreparaionModel = require("./record.samplePreparaionModel");
 exports.sampleCollectionModel = require("./record.sampleCollectionModel");
 exports.clientModel = require("./clientModel");
+exports.qmr14Model = require("./qmr14Model");

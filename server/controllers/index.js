@@ -10,3 +10,4 @@ exports.rawMaterialCtrl = require("./rawMaterialCtrl");
 exports.recordCtrl = require("./recordCtrl");
 exports.dynamicFormCtrl = require("./dynamicFormCtrl");
 exports.genericMasterCtrl = require("./genericMasterCtrl");
+exports.qmr14Ctrl = require("./qmr14Ctrl");
