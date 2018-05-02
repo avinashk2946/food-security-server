@@ -24,7 +24,7 @@ var qmr14Schema = new mongoose.Schema({
     header: {},
     data: {},
     categoryId:mongoose.Schema.Types.ObjectId,
-    subCategoryIdmongoose.Schema.Types.ObjectId
+    subCategoryId:mongoose.Schema.Types.ObjectId
 });
 // rawMatrialSchema.plugin(uniqueValidator, {message: constants.messages.error.roleExist});
 
